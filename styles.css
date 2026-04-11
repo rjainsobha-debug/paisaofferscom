@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #F9F9F9;
+}
+
+.ticker {
+  background: #FF6600;
+  color: white;
+  padding: 8px;
+  text-align: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: white;
+}
+
+.logo {
+  font-weight: bold;
+  color: #FF6600;
+}
+
+.nav-links a {
+  margin: 10px;
+  text-decoration: none;
+}
+
+.search {
+  padding: 8px;
+}
+
+.signup {
+  background: #FF6600;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+}
+
+.hero {
+  background: #1A1A2E;
+  color: white;
+  padding: 60px;
+  text-align: center;
+}
+
+.cta {
+  background: #00C853;
+  color: white;
+  padding: 10px 20px;
+}
+
+.steps {
+  display: flex;
+  justify-content: space-around;
+}
+
+.card {
+  background: #ffe6d5;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.grid {
+  display: flex;
+  gap: 20px;
+}
+
+.deal-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.old {
+  text-decoration: line-through;
+}
+
+.badge {
+  color: green;
+}
+
+footer {
+  background: #1A1A2E;
+  color: white;
+  padding: 20px;
+}
+
+.footer-grid {
+  display: flex;
+  justify-content: space-around;
+}
+
+.bottom {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.whatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: green;
+  padding: 15px;
+  border-radius: 50%;
+}
+
+#topBtn {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+}
