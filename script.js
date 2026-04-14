@@ -366,7 +366,7 @@ function createDealCard(deal, id) {
       <div class="deal-footer">
         <a href="${escapeHtml(deal.link)}" target="_blank" rel="noopener" 
            class="deal-cta" 
-           onclick="trackClick('${escapeForOnclick(deal.title)}','${deal.link}',${deal.newPrice || 0},'${deal.store || ""}','${deal.category || ""}'); trackEvent('deal_click', '${escapeHtml(deal.store)} - ${escapeHtml(deal.title.slice(0,30))}')"
+           onclick="trackClick('${escapeForOnclick(deal.title)}','${deal.link}',${deal.newPrice || deal.price || 0},'${deal.store || ""}','${deal.category || ""}'); trackEvent('deal_click', '${escapeHtml(deal.store)} - ${escapeHtml(deal.title.slice(0,30))}')"
           <i class="fas fa-external-link-alt"></i> Get This Deal
         </a>
       </div>
