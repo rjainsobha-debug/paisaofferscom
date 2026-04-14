@@ -257,11 +257,11 @@ section { padding: 64px 0; }
 /* ============================================================ DEALS */
 .deals-section { padding: 48px 0; }
 .deals-grid {
-  display: grid;   /* 🔥 MOST IMPORTANT */
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));  /* 🔥 CHANGE */
   gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;                     /* 🔥 ADD */
+  padding: 0 20px;                 /* 🔥 ADD */
 }
 .loading-spinner {
   grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-muted);
