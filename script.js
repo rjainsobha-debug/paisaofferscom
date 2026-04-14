@@ -326,43 +326,43 @@ function renderDeals() {
 
 function createDealCard(deal, id) {
   const discount = Math.round(deal.discount) || Math.round(((deal.oldPrice - deal.newPrice) / deal.oldPrice) * 100) || 0;
-  const isHot = discount >= 40;
-  const isNew = isNewDeal(deal);
   const savings = deal.oldPrice && deal.newPrice ? Math.round(deal.oldPrice - deal.newPrice) : 0;
-  const storeClass = getStoreClass(deal.store);
   const index = id || Math.random().toString(36).substr(2, 6);
 
   return `
-    <div class="deal-card" id="card-${index}">
+    <div class="deal-card">
+
       <div class="deal-image-wrap">
         <img 
           src="${escapeHtml(deal.image)}" 
           alt="${escapeHtml(deal.title)}"
           loading="lazy"
-          onerror="this.src='https://placehold.co/400x300/f5f7fa/6b7280?text=Deal'"
+          onerror="this.src='https://placehold.co/400x300'"
         >
+
         <div class="deal-badges">
-         ${discount > 0 ? `<span class="badge badge-discount">🔥 ${discount}% OFF</span>` : ''}
-         ${deal.cashback ? `<span class="badge badge-cashback">💰 ${escapeHtml(deal.cashback)}</span>` : ''}
-          ${isHot ? `<span class="badge badge-hot">🔥 Trending</span>` : ''}
-         ${isNew ? `<span class="badge badge-new">🆕 New</span>` : ''}
+          ${discount > 0 ? `<span class="badge badge-discount">🔥 ${discount}% OFF</span>` : ''}
+          ${deal.cashback ? `<span class="badge badge-cashback">💰 ${escapeHtml(deal.cashback)}</span>` : ''}
           <span class="badge badge-store">${escapeHtml(deal.store)}</span>
         </div>
-       <div class="deal-body">
+      </div>
+
+      <div class="deal-body">
         <div class="deal-title">${escapeHtml(deal.title)}</div>
+
         <div class="deal-prices">
-          ${deal.oldPrice > 0 ? `<span class="price-old">₹${formatPrice(deal.oldPrice)}</span>` : ''}
-          ${deal.newPrice > 0 ? `<span class="price-new">₹${formatPrice(deal.newPrice)}</span>` : ''}
-          ${savings > 0 ? `<span class="price-save">Save ₹${formatPrice(savings)}</span>` : ''}
+          ${deal.oldPrice ? `<span class="price-old">₹${deal.oldPrice}</span>` : ''}
+          ${deal.newPrice ? `<span class="price-new">₹${deal.newPrice}</span>` : ''}
+          ${savings > 0 ? `<span class="price-save">Save ₹${savings}</span>` : ''}
         </div>
-        </div>
+      </div>
+
       <div class="deal-footer">
-        <a href="${escapeHtml(deal.link)}" target="_blank" rel="noopener" 
-           class="deal-cta" 
-           onclick="trackClick('${escapeForOnclick(deal.title)}','${deal.link}',${deal.newPrice || deal.price || 0},'${deal.store || ""}','${deal.category || ""}'); trackEvent('deal_click', '${escapeHtml(deal.store)} - ${escapeHtml(deal.title.slice(0,30))}')"
-          <i class="fas fa-external-link-alt"></i> Get This Deal
+        <a href="${deal.link}" target="_blank" class="deal-cta">
+          Get This Deal
         </a>
       </div>
+
     </div>
   `;
 }
