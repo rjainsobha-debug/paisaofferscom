@@ -620,3 +620,6 @@ function getStoreClass(store) {
   if (s.includes('ajio')) return 'store-ajio';
   return 'store-default';
 }
+function trackClick(product) {
+  localStorage.setItem("last_clicked", JSON.stringify(product));
+}
