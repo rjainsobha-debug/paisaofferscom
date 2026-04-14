@@ -46,7 +46,7 @@ img { max-width: 100%; display: block; }
 ul { list-style: none; }
 input, select, button { font-family: inherit; outline: none; }
 
-.container { max-width: 1200px; margin: auto; padding: 20px; }
+.container { max-width: 1400px; margin: auto; padding: 20px; width: 100%; }
 
 /* ============================================================ BUTTONS */
 .btn {
@@ -258,10 +258,9 @@ section { padding: 64px 0; }
 .deals-section { padding: 48px 0; }
 .deals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));  /* 🔥 CHANGE */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
-  width: 100%;                     /* 🔥 ADD */
-  padding: 0 20px;                 /* 🔥 ADD */
+  width: 100%;
 }
 .loading-spinner {
   grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-muted);
