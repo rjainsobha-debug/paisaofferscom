@@ -3,7 +3,7 @@
 // Google Sheets API + Dynamic Deals + All Features
 // ============================================================
 
-const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycby8XKOmWdlWjqhKCeebzjiTt72Adrjiz69JMythHeaKey-v9VXF8GinEwy3OHyE1KD9uw/exec";
+const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbxfEfy9NGcCxrp8eRU2baDJdu302nA0YHug0N1NxziyWcGEGZwIJiLMhAyF5TqZUSSW_w/exec";
 const TELEGRAM_CHANNEL = "https://t.me/paisaoffersdotcom";
 const TELEGRAM_BOT = "https://t.me/paisaoffers_bot";
 const GA_ID = "G-Q1EHZH78QC";
