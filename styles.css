@@ -279,7 +279,6 @@ section { padding: 64px 0; }
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  max-width: 360px;
   transition: all 0.3s ease;
 }
 .deal-card:hover {
@@ -631,7 +630,12 @@ section { padding: 64px 0; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
   .telegram-cta-card { justify-content: center; text-align: center; }
   .telegram-icon-large { font-size: 56px; }
-  .deals-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+  .deals-grid {
+  display: grid;   /* 🔥 ADD THIS */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
   .referral-card { padding: 32px 20px; }
   .newsletter-form { flex-direction: column; }
   .newsletter-form input { border-radius: 12px; }
