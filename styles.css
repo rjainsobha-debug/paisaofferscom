@@ -264,6 +264,7 @@ section { padding: 64px 0; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);   /* 🔥 FORCE 3 COLUMNS */
   gap: 20px;
+ width: 100%;   /* 🔥 ADD THIS */
 }
 @media (max-width: 1024px) {
   .deals-grid {
