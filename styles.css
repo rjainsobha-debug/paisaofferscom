@@ -263,9 +263,8 @@ section { padding: 64px 0; }
 .deals-section { padding: 48px 0; }
 .deals-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);   /* 🔥 FORCE 3 COLUMNS */
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
- width: 100%;   /* 🔥 ADD THIS */
 }
 @media (max-width: 1024px) {
   .deals-grid {
@@ -307,17 +306,17 @@ section { padding: 64px 0; }
 }
 
 .deal-image-wrap {
-  position: relative;
-  overflow: hidden;
+  width: 100%;
   aspect-ratio: 1/1;
   background: #fff;
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .deal-image-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: contain;   /* 🔥 CHANGE THIS */
-  background: #fff;
+  object-fit: contain;
 }
 .deal-card:hover .deal-image-wrap img { transform: scale(1.04); }
 
