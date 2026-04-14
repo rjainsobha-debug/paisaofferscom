@@ -304,11 +304,24 @@ section { padding: 64px 0; }
 
 .deal-badges { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
 .badge {
-  display: inline-block; padding: 4px 10px; border-radius: 50px;
-  font-size: 11px; font-weight: 700; line-height: 1;
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
 }
-.badge-discount { background: var(--accent); color: #fff; }
-.badge-cashback { background: var(--primary); color: #fff; }
+.badge-discount {
+  background: #22c55e;   /* green */
+}
+
+.badge-cashback {
+  background: #fb923c;   /* orange */
+}
+
+.badge-store {
+  background: #f59e0b;   /* yellow */
+}
 .badge-hot { background: #EF4444; color: #fff; animation: pulse-badge 1.5s infinite; }
 .badge-new { background: #8B5CF6; color: #fff; }
 @keyframes pulse-badge { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
