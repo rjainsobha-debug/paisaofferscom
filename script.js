@@ -342,14 +342,13 @@ function createDealCard(deal, id) {
           onerror="this.src='https://placehold.co/400x300/f5f7fa/6b7280?text=Deal'"
         >
         <div class="deal-badges">
-          ${discount > 0 ? `<span class="badge badge-discount">${discount}% OFF</span>` : ''}
-          ${deal.cashback ? `<span class="badge badge-cashback">${escapeHtml(deal.cashback)}</span>` : ''}
-          ${isHot ? `<span class="badge badge-hot">🔥 HOT</span>` : ''}
-          ${isNew ? `<span class="badge badge-new">NEW</span>` : ''}
+         ${discount > 0 ? `<span class="badge badge-discount">🔥 ${discount}% OFF</span>` : ''}
+         ${deal.cashback ? `<span class="badge badge-cashback">💰 ${escapeHtml(deal.cashback)}</span>` : ''}
+          ${isHot ? `<span class="badge badge-hot">🔥 Trending</span>` : ''}
+         ${isNew ? `<span class="badge badge-new">🆕 New</span>` : ''}
+          <span class="badge badge-store">${escapeHtml(deal.store)}</span>
         </div>
-        <span class="store-badge ${storeClass}">${escapeHtml(deal.store)}</span>
-      </div>
-      <div class="deal-body">
+       <div class="deal-body">
         <div class="deal-title">${escapeHtml(deal.title)}</div>
         <div class="deal-prices">
           ${deal.oldPrice > 0 ? `<span class="price-old">₹${formatPrice(deal.oldPrice)}</span>` : ''}
