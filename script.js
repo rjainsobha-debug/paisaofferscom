@@ -369,10 +369,14 @@ function createDealCard(deal, id) {
 
 function renderEditorPicks() {
   const grid = document.getElementById('editorDealsGrid');
+  if (allDeals.length < 3) return;
   if (!grid || allDeals.length === 0) return;
 
-  // Pick top 4 deals by discount
-  const picks = [...allDeals].sort((a, b) => (b.discount || 0) - (a.discount || 0)).slice(0, 4);
+  const picks = allDeals.length > 4
+  ? [...allDeals]
+      .sort((a, b) => (b.discount || 0) - (a.discount || 0))
+      .slice(2, 6)
+  : [...allDeals];   // fallback if less deals
   grid.innerHTML = picks.map((deal, i) => createDealCard(deal, `ep-${i}`)).join('');
   picks.forEach((deal, i) => startCountdown(deal, `ep-${i}`));
 }
