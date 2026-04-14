@@ -356,13 +356,7 @@ function createDealCard(deal, id) {
           ${deal.newPrice > 0 ? `<span class="price-new">₹${formatPrice(deal.newPrice)}</span>` : ''}
           ${savings > 0 ? `<span class="price-save">Save ₹${formatPrice(savings)}</span>` : ''}
         </div>
-        ${deal.expiry ? `
-          <div class="deal-countdown">
-            <i class="fas fa-clock"></i>
-            <span class="countdown-timer" id="timer-${index}">Loading...</span>
-          </div>
-        ` : ''}
-      </div>
+        </div>
       <div class="deal-footer">
         <a href="${escapeHtml(deal.link)}" target="_blank" rel="noopener" 
            class="deal-cta" 
