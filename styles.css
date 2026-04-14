@@ -320,10 +320,14 @@ section { padding: 64px 0; }
 }
 
 .badge-store {
-  background: #f59e0b;   /* yellow */
+  background: #f59e0b;   /* yellow/orange */
 }
-.badge-hot { background: #EF4444; color: #fff; animation: pulse-badge 1.5s infinite; }
-.badge-new { background: #8B5CF6; color: #fff; }
+.badge-hot {
+  background: #ef4444;   /* red */
+}
+.badge-new {
+  background: #3b82f6;   /* blue */
+}
 @keyframes pulse-badge { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
 
 .store-badge {
