@@ -366,7 +366,7 @@ function createDealCard(deal, id) {
       <div class="deal-footer">
         <a href="${escapeHtml(deal.link)}" target="_blank" rel="noopener" 
            class="deal-cta" 
-           onclick="trackEvent('deal_click', '${escapeHtml(deal.store)} - ${escapeHtml(deal.title.slice(0,30))}')">
+           onclick="trackClick('${escapeForOnclick(deal.title)}','${deal.link}',${deal.newPrice || 0},'${deal.store || ""}','${deal.category || ""}'); trackEvent('deal_click', '${escapeHtml(deal.store)} - ${escapeHtml(deal.title.slice(0,30))}')"
           <i class="fas fa-external-link-alt"></i> Get This Deal
         </a>
       </div>
@@ -622,4 +622,23 @@ function getStoreClass(store) {
 }
 function trackClick(product) {
   localStorage.setItem("last_clicked", JSON.stringify(product));
+}
+// ================= CLICK TRACKING (SAFE ADDITION)
+function trackClick(title, link, price, store, category) {
+  const data = {
+    title: title || "",
+    link: link || "",
+    price: price || 0,
+    store: store || "",
+    category: category || "",
+    time: new Date()
+  };
+
+  localStorage.setItem("last_clicked", JSON.stringify(data));
+}
+
+// Prevent breaking due to quotes
+function escapeForOnclick(str) {
+  if (!str) return "";
+  return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
