@@ -46,7 +46,11 @@ img { max-width: 100%; display: block; }
 ul { list-style: none; }
 input, select, button { font-family: inherit; outline: none; }
 
-.container { max-width: 1400px; margin: auto; padding: 20px; width: 100%; }
+.container {
+  width: 100%;
+  max-width: 100%;
+  padding: 20px 40px;   /* more horizontal space */
+}
 
 /* ============================================================ BUTTONS */
 .btn {
