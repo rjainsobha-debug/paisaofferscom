@@ -1,35 +1,48 @@
-import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { app } from "./firebase-config.js";
+document.addEventListener("DOMContentLoaded", loadAdminOrders);
 
-const db = getFirestore(app);
+function loadAdminOrders() {
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-async function loadOrders() {
-  const snapshot = await getDocs(collection(db, "orders"));
   let html = "";
 
-  snapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-
+  orders.forEach((o, index) => {
     html += `
-      <div>
-        ${data.amazon_order_id} - ₹${data.amount}
-        <button onclick="approve('${docSnap.id}')">Approve</button>
+      <div style="border:1px solid #000; margin:10px; padding:10px;">
+        <p><b>${o.title}</b></p>
+        <p>₹${o.amount}</p>
+        <p>Status: ${o.status}</p>
+
+        <button onclick="approve(${index})">Approve</button>
       </div>
     `;
   });
 
-  document.getElementById("orders").innerHTML = html;
+  document.getElementById("admin_orders").innerHTML = html;
 }
 
-window.approve = async function(id) {
-  const cashback = prompt("Enter cashback");
+// APPROVE FUNCTION
+function approve(index) {
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-  await updateDoc(doc(db, "orders", id), {
-    status: "approved",
-    cashback_amount: cashback
-  });
+  let order = orders[index];
 
-  alert("Approved!");
-};
+  // cashback = 1%
+  let cashback = order.amount * 0.01;
 
-loadOrders();
+  order.status = "approved";
+  order.cashback = cashback;
+
+  orders[index] = order;
+
+  localStorage.setItem("orders", JSON.stringify(orders));
+
+  // UPDATE WALLET
+  let wallet = parseFloat(localStorage.getItem("wallet_balance")) || 0;
+  wallet += cashback;
+
+  localStorage.setItem("wallet_balance", wallet);
+
+  alert("Approved & cashback added!");
+
+  loadAdminOrders();
+}
