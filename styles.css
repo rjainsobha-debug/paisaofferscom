@@ -271,15 +271,29 @@ section { padding: 64px 0; }
 
 /* DEAL CARD */
 .deal-card {
-  background: var(--card-bg); border-radius: var(--radius);
-  border: 1px solid var(--border); overflow: hidden; position: relative;
-  transition: var(--transition); display: flex; flex-direction: column;
-  box-shadow: var(--shadow);
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eee;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   max-width: 360px;
+  transition: all 0.3s ease;
 }
-.deal-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
+.deal-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
 
-.deal-image-wrap { position: relative; overflow: hidden; aspect-ratio: 1/1; background: #fff; }
+.deal-image-wrap {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+  background: #fff;
+  padding: 10px;
+}
 .deal-image-wrap img {
   width: 100%;
   height: 100%;
