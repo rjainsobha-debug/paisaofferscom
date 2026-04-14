@@ -275,10 +275,11 @@ section { padding: 64px 0; }
   border: 1px solid var(--border); overflow: hidden; position: relative;
   transition: var(--transition); display: flex; flex-direction: column;
   box-shadow: var(--shadow);
+  max-width: 360px;
 }
 .deal-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
 
-.deal-image-wrap { position: relative; overflow: hidden; aspect-ratio: 4/3; background: var(--bg); }
+.deal-image-wrap { position: relative; overflow: hidden; aspect-ratio: 1/1; background: #fff; }
 .deal-image-wrap img {
   width: 100%;
   height: 100%;
@@ -599,7 +600,7 @@ section { padding: 64px 0; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
   .telegram-cta-card { justify-content: center; text-align: center; }
   .telegram-icon-large { font-size: 56px; }
-  .deals-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .deals-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
   .referral-card { padding: 32px 20px; }
   .newsletter-form { flex-direction: column; }
   .newsletter-form input { border-radius: 12px; }
