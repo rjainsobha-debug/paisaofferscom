@@ -262,9 +262,19 @@ section { padding: 64px 0; }
 .deals-section { padding: 48px 0; }
 .deals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, 1fr);   /* 🔥 FORCE 3 COLUMNS */
   gap: 20px;
-  width: 100%;
+}
+@media (max-width: 1024px) {
+  .deals-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .deals-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .loading-spinner {
   grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-muted);
@@ -283,6 +293,7 @@ section { padding: 64px 0; }
   border: 1px solid #eee;
   overflow: hidden;
   position: relative;
+   width: 100%;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
