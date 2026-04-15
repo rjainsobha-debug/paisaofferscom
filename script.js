@@ -639,3 +639,77 @@ function escapeForOnclick(str) {
   if (!str) return "";
   return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
+// ===============================
+// AUTO LOAD DEALS FROM WORKER
+// ===============================
+async function loadDynamicDeals() {
+  try {
+    const API_URL = "https://deals-api.rjain-sobha.workers.dev";
+
+    const res = await fetch(API_URL);
+    const data = await res.json();
+
+    const container = document.getElementById("dealsGrid");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    // 🔥 SORT BEST DEALS FIRST
+    data.sort((a,b) => 
+      (b.old_price - b.new_price) - (a.old_price - a.new_price)
+    );
+
+    data.forEach(deal => {
+
+      const oldPrice = Number(deal.old_price);
+      const newPrice = Number(deal.new_price);
+
+      const discount = oldPrice
+        ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
+        : 0;
+
+      let img = deal.image || "";
+      if (img.includes("_SL")) {
+        img = img.replace(/_SL\d+_/, "_SL500_");
+      }
+
+      const card = `
+      <div class="deal-card">
+        <div class="deal-img">
+          <img src="${img}" alt="${deal.title}">
+          <span class="discount-badge">${discount}% OFF</span>
+        </div>
+
+        <div class="deal-body">
+          <h3>${deal.title}</h3>
+
+          <div class="price-row">
+            <span class="new-price">₹${newPrice}</span>
+            <span class="old-price">₹${oldPrice}</span>
+          </div>
+
+          <div class="deal-meta">
+            ⏳ Limited Time Deal
+          </div>
+
+          <a href="${deal.link}" target="_blank" class="deal-btn">
+            🔥 Grab Deal Now
+          </a>
+
+          <div class="trust">
+            ✔ Verified Deal
+          </div>
+        </div>
+      </div>
+      `;
+
+      container.innerHTML += card;
+    });
+
+  } catch (err) {
+    console.log("Deals load error:", err);
+  }
+}
+
+// RUN AFTER PAGE LOAD
+document.addEventListener("DOMContentLoaded", loadDynamicDeals);
