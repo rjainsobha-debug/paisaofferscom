@@ -300,11 +300,11 @@ function createDealCard(deal, id) {
       </div>
 
       <div class="deal-footer">
-        <a href="javascript:void(0)"
-   class="deal-cta"
-   onclick="handleDealClick('${escapeHtml(deal.title).replace(/'/g,"\\'")}', '${escapeHtml(deal.link)}', ${deal.newPrice || 0}, '${escapeHtml(deal.store)}', '${escapeHtml(deal.category)}')">
-  🔥 Get Cashback + Deal →
-</a>
+        <a href="${escapeHtml(deal.link)}" target="_blank" rel="noopener"
+           class="deal-cta"
+           onclick="handleDealClick('${escapeHtml(deal.title).replace(/'/g,"\\'")}', '${escapeHtml(deal.link)}', ${deal.newPrice || 0}, '${escapeHtml(deal.store)}', '${escapeHtml(deal.category)}')">
+          🔥 Get Cashback + Deal →
+        </a>
       </div>
     </div>
   `;
@@ -565,7 +565,7 @@ function handleLogin(e) {
   const pass = document.getElementById('loginPass')?.value;
 
   const users = JSON.parse(localStorage.getItem('po_users') || '[]');
-  const user = users.find(u => u.email === email && u.u.password === btoa(pass)
+  const user = users.find(u => u.email === email && u.password === btoa(pass));
 
   if (!user) {
     showAuthError('loginError', 'Invalid email or password.');
@@ -702,13 +702,7 @@ function handleClaimSubmit(e) {
     showToast('Please fill all fields correctly.', 'error');
     return;
   }
-// 🔒 Prevent duplicate order submission
-const existingTxns = JSON.parse(localStorage.getItem('po_transactions') || '[]');
 
-if (existingTxns.some(t => t.order_id === orderId)) {
-  showToast('This order ID is already submitted.', 'error');
-  return;
-}
   const cashback = Math.min(orderAmount * CASHBACK_RATE, MAX_CASHBACK);
 
   const lastDeal = JSON.parse(localStorage.getItem('last_clicked_deal') || '{}');
