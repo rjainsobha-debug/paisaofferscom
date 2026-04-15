@@ -565,7 +565,7 @@ function handleLogin(e) {
   const pass = document.getElementById('loginPass')?.value;
 
   const users = JSON.parse(localStorage.getItem('po_users') || '[]');
-  const user = users.find(u => u.email === email && u.password === btoa(unescape(encodeURIComponent(pass)))
+  const user = users.find(u => u.email === email && u.password === btoa(unescape(encodeURIComponent(pass)));
 
   if (!user) {
     showAuthError('loginError', 'Invalid email or password.');
