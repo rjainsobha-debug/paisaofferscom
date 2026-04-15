@@ -300,11 +300,11 @@ function createDealCard(deal, id) {
       </div>
 
       <div class="deal-footer">
-        <a href="${escapeHtml(deal.link)}" target="_blank" rel="noopener"
-           class="deal-cta"
-           onclick="handleDealClick('${escapeHtml(deal.title).replace(/'/g,"\\'")}', '${escapeHtml(deal.link)}', ${deal.newPrice || 0}, '${escapeHtml(deal.store)}', '${escapeHtml(deal.category)}')">
-          🔥 Get Cashback + Deal →
-        </a>
+        <a href="javascript:void(0)"
+   class="deal-cta"
+   onclick="handleDealClick('${escapeHtml(deal.title).replace(/'/g,"\\'")}', '${escapeHtml(deal.link)}', ${deal.newPrice || 0}, '${escapeHtml(deal.store)}', '${escapeHtml(deal.category)}')">
+  🔥 Get Cashback + Deal →
+</a>
       </div>
     </div>
   `;
