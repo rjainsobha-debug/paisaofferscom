@@ -702,7 +702,13 @@ function handleClaimSubmit(e) {
     showToast('Please fill all fields correctly.', 'error');
     return;
   }
+// 🔒 Prevent duplicate order submission
+const existingTxns = JSON.parse(localStorage.getItem('po_transactions') || '[]');
 
+if (existingTxns.some(t => t.order_id === orderId)) {
+  showToast('This order ID is already submitted.', 'error');
+  return;
+}
   const cashback = Math.min(orderAmount * CASHBACK_RATE, MAX_CASHBACK);
 
   const lastDeal = JSON.parse(localStorage.getItem('last_clicked_deal') || '{}');
