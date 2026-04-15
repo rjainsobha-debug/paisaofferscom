@@ -596,7 +596,7 @@ function handleSignup(e) {
     name,
     email,
     mobile: mobile || '',
-    password: btoa(unescape(encodeURIComponent(pass))),
+    password: btoa(pass),
     wallet_balance: 0,
     pending_cashback: 0,
     confirmed_cashback: 0,
