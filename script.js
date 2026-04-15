@@ -475,6 +475,7 @@ function handleDealClick(title, link, price, store, category) {
   clicks.unshift(clickData);
   if (clicks.length > 50) clicks.pop();
   localStorage.setItem('po_clicks', JSON.stringify(clicks));
+  localStorage.setItem('last_clicked_deal', JSON.stringify({ deal_id: btoa(link), title, price }));
 
   trackEvent('deal_click', `${store}: ${title.slice(0, 40)}`);
 }
@@ -704,10 +705,12 @@ function handleClaimSubmit(e) {
 
   const cashback = Math.min(orderAmount * CASHBACK_RATE, MAX_CASHBACK);
 
+  const lastDeal = JSON.parse(localStorage.getItem('last_clicked_deal') || '{}');
+
   const transaction = {
     transaction_id: 'txn_' + Date.now(),
     user_id: user.id,
-    deal_id: null,
+    deal_id: lastDeal.deal_id || null,
     order_id: orderId,
     product_link: productLink,
     order_amount: orderAmount,
