@@ -701,7 +701,153 @@ async function loadDynamicDeals() {
           </div>
         </div>
       </div>
-      `;
+      `;// ===============================
+// NEW API SYSTEM (FULL)
+// ===============================
+let allDeals = [];
+
+async function loadDealsFromAPI() {
+  try {
+    const API_URL = "https://deals-api.rjain-sobha.workers.dev";
+
+    const res = await fetch(API_URL);
+    allDeals = await res.json();
+
+    applyFilters();
+
+  } catch (err) {
+    console.log("API ERROR:", err);
+  }
+}
+
+// ===============================
+// APPLY FILTERS
+// ===============================
+function applyFilters() {
+
+  const searchText = document.getElementById("searchInput")?.value.toLowerCase() || "";
+  const storeFilter = document.getElementById("filterStore")?.value || "All";
+  const discountFilter = Number(document.getElementById("filterDiscount")?.value || 0);
+  const sortType = document.getElementById("filterSort")?.value || "latest";
+
+  let filtered = allDeals.filter(deal => {
+
+    const title = (deal.title || "").toLowerCase();
+
+    // SEARCH
+    if (searchText && !title.includes(searchText)) return false;
+
+    // STORE FILTER
+    if (storeFilter !== "All" && !(deal.link || "").toLowerCase().includes(storeFilter.toLowerCase())) return false;
+
+    // DISCOUNT FILTER
+    const oldPrice = Number(deal.old_price);
+    const newPrice = Number(deal.new_price);
+    const discount = oldPrice ? ((oldPrice - newPrice) / oldPrice) * 100 : 0;
+
+    if (discount < discountFilter) return false;
+
+    return true;
+  });
+
+  // SORT
+  if (sortType === "discount") {
+    filtered.sort((a,b) => (b.old_price - b.new_price) - (a.old_price - a.new_price));
+  } else {
+    filtered.reverse();
+  }
+
+  renderDeals(filtered);
+}
+
+// ===============================
+// RENDER
+// ===============================
+function renderDeals(data) {
+  const container = document.getElementById("dealsGrid");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (data.length === 0) {
+    container.innerHTML = "<p>No deals found</p>";
+    return;
+  }
+
+  data.forEach(deal => {
+
+    const oldPrice = Number(deal.old_price);
+    const newPrice = Number(deal.new_price);
+
+    const discount = oldPrice
+      ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
+      : 0;
+
+    let img = deal.image || "";
+    if (img.includes("_SL")) {
+      img = img.replace(/_SL\d+_/, "_SL500_");
+    }
+
+    const card = `
+    <div class="deal-card">
+      <div class="deal-img">
+        <img src="${img}">
+        <span class="discount-badge">${discount}% OFF</span>
+      </div>
+
+      <div class="deal-body">
+        <h3>${deal.title}</h3>
+
+        <div class="price-row">
+          <span class="new-price">₹${newPrice}</span>
+          <span class="old-price">₹${oldPrice}</span>
+        </div>
+
+        <div class="deal-meta">⏳ Limited Time Deal</div>
+
+        <a href="${deal.link}" target="_blank" class="deal-btn">
+          🔥 Grab Deal Now
+        </a>
+
+        <div class="trust">✔ Verified Deal</div>
+      </div>
+    </div>
+    `;
+
+    container.innerHTML += card;
+  });
+
+  const countEl = document.getElementById("dealCount");
+  if (countEl) countEl.innerText = data.length + " Deals Found";
+}
+
+// ===============================
+// CATEGORY FILTER
+// ===============================
+function filterCategory(category) {
+
+  if (category === "All") {
+    applyFilters();
+    return;
+  }
+
+  const filtered = allDeals.filter(deal =>
+    (deal.title || "").toLowerCase().includes(category.toLowerCase())
+  );
+
+  renderDeals(filtered);
+}
+
+// ===============================
+// LIVE SEARCH
+// ===============================
+document.getElementById("searchInput")?.addEventListener("input", applyFilters);
+
+// ===============================
+// INIT
+// ===============================
+document.addEventListener("DOMContentLoaded", loadDealsFromAPI);
 
       container.innerHTML += card;
     });
