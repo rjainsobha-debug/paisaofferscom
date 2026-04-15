@@ -67,9 +67,29 @@
     </div>
   </div>
 </header>
-
+<!-- TRENDING DEALS -->
+<section class="deals-section">
+  <div class="container">
+    <div class="section-header with-action">
+      <div>
+        <h2>🔥 Aaj Ki Best Deals</h2>
+        <p>Handpicked hot deals updated daily</p>
+      </div>
+      <button class="btn btn-outline" onclick="loadMoreDeals()">View All</button>
+    </div>
+    <div class="deals-grid" id="dealsGrid">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading amazing deals...</p>
+      </div>
+    </div>
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="btn btn-outline btn-lg" onclick="loadMoreDeals()">Load More Deals</button>
+    </div>
+  </div>
+</section>
 <!-- HERO CAROUSEL -->
-<section class="hero" id="hero">
+<section class="hero" id="hero" style="height:200px;">
   <div class="carousel" id="carousel">
     <div class="carousel-track" id="carouselTrack">
       <div class="slide slide-1">
@@ -248,28 +268,6 @@
       <div class="filter-results">
         <span id="dealCount">Loading deals...</span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- TRENDING DEALS -->
-<section class="deals-section">
-  <div class="container">
-    <div class="section-header with-action">
-      <div>
-        <h2>🔥 Aaj Ki Best Deals</h2>
-        <p>Handpicked hot deals updated daily</p>
-      </div>
-      <button class="btn btn-outline" onclick="loadMoreDeals()">View All</button>
-    </div>
-    <div class="deals-grid" id="dealsGrid">
-      <div class="loading-spinner">
-        <div class="spinner"></div>
-        <p>Loading amazing deals...</p>
-      </div>
-    </div>
-    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
-      <button class="btn btn-outline btn-lg" onclick="loadMoreDeals()">Load More Deals</button>
     </div>
   </div>
 </section>
