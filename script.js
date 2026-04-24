@@ -1,147 +1,181 @@
 /* ============================================================
-PaisaOffers - PIPELINE BASED SCRIPT
-Works with: TG_SHEET → WEB_SHEET → WA_SHEET
-Website ONLY shows WEB_SHEET where transfer_to_web = YES
+PaisaOffers - FINAL PRODUCTION SCRIPT
+Source: WEB_SHEET (status_web = YES)
 ============================================================ */
 
-const GOOGLE_SHEET_API = "PUT_YOUR_WEB_SHEET_API_URL_HERE";
+const API_URL = "https://script.google.com/macros/s/AKfycbya_hYfV16Uvm23mikMRX37Mc5yWSDyqno1reghCFU_eXQKLydm0FOG2CIljnKAhEUe/exec";
 
 let allDeals = [];
 let filteredDeals = [];
-let visibleCount = 8;
-let currentCategory = "All";
+let visibleCount = 12;
 
-/* ========================= LOAD DEALS ========================= */
+/* ================= LOAD DATA ================= */
 async function loadDeals() {
 try {
-const res = await fetch(GOOGLE_SHEET_API + "?t=" + new Date().getTime());
+const res = await fetch(API_URL + "?t=" + new Date().getTime());
 const data = await res.json();
 
 ```
-// 🔥 ONLY SHOW APPROVED DEALS
+// 🔥 FILTER ONLY APPROVED DEALS
 allDeals = data
-  .map(normalizeDeal)
-  .filter(d =>
-    d &&
-    d.transfer_to_web === "YES"
-  );
+  .map(normalize)
+  .filter(d => d.status_web === "YES");
 
-// 🔥 SORT: BEST DEALS FIRST
+// 🔥 SORT BY BEST DISCOUNT
 allDeals.sort((a, b) => b.discount - a.discount);
 
 filteredDeals = [...allDeals];
 
-updateDealCount();
+renderHotDeals();
 renderDeals();
+updateCount();
 ```
 
 } catch (err) {
-console.error("Error loading deals:", err);
+console.error("Error:", err);
 document.getElementById("dealsGrid").innerHTML =
-"<p style='text-align:center'>Failed to load deals</p>";
+"<div class='empty-state'>⚠️ Failed to load deals</div>";
 }
 }
 
-/* ========================= NORMALIZE ========================= */
-function normalizeDeal(row) {
-if (!row) return null;
-
-const oldPrice = parseFloat(row.old_price || row.oldPrice || 0) || 0;
-const newPrice = parseFloat(row.new_price || row.newPrice || 0) || 0;
-
-const discount = oldPrice
-? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
-: 0;
+/* ================= NORMALIZE ================= */
+function normalize(row) {
+const oldP = Number(row.old_price || 0);
+const newP = Number(row.new_price || 0);
 
 return {
-title: row.title || "Product Deal",
-image: row.image || "https://placehold.co/400x300",
-store: row.store || "Amazon",
-oldPrice,
-newPrice,
-discount,
+title: row.title || "Deal",
+image: row.image || "https://via.placeholder.com/300",
 link: row.link || "#",
-category: row.category || "General",
-expiry: row.expiry || "",
-transfer_to_web: (row.transfer_to_web || "").toUpperCase()
+hook: row.hook || "",
+old: oldP,
+new: newP,
+discount: oldP ? Math.round(((oldP - newP) / oldP) * 100) : 0,
+status_web: (row.status_web || "").toUpperCase()
 };
 }
 
-/* ========================= RENDER ========================= */
+/* ================= HOT DEALS ================= */
+function renderHotDeals() {
+const container = document.getElementById("hotGrid");
+
+const hotDeals = allDeals.slice(0, 6);
+
+container.innerHTML = hotDeals.map(card).join("");
+}
+
+/* ================= ALL DEALS ================= */
 function renderDeals() {
 const grid = document.getElementById("dealsGrid");
-if (!grid) return;
-
-if (filteredDeals.length === 0) {
-grid.innerHTML = "<p style='text-align:center'>No deals available</p>";
-return;
-}
 
 const dealsToShow = filteredDeals.slice(0, visibleCount);
 
-grid.innerHTML = dealsToShow.map(d => createCard(d)).join("");
+if (dealsToShow.length === 0) {
+grid.innerHTML = "<div class='empty-state'>No deals found</div>";
+return;
 }
 
-/* ========================= CARD ========================= */
-function createCard(d) {
+grid.innerHTML = dealsToShow.map(card).join("");
+
+// Load More Button
+document.getElementById("loadMoreWrap").style.display =
+filteredDeals.length > visibleCount ? "block" : "none";
+}
+
+/* ================= CARD ================= */
+function card(d) {
+const waLink = "https://wa.me/?text=" + encodeURIComponent(
+`🔥 ${d.title}\n\n💰 ₹${d.new} (MRP ₹${d.old})\n\n👉 Buy Now: ${d.link}`
+);
+
 return `
 
   <div class="deal-card">
-    <div class="deal-img-wrap">
-      <img src="${d.image}" alt="${d.title}" loading="lazy">
-      <span class="disc-badge">${d.discount}% OFF</span>
-    </div>
 
 ```
+<div class="deal-img-wrap">
+  <img src="${d.image}" alt="${d.title}" loading="lazy">
+  <span class="discount-badge">${d.discount}% OFF</span>
+</div>
+
 <div class="deal-body">
   <div class="deal-title">${d.title}</div>
 
+  ${d.hook ? `<div class="deal-hook">${d.hook}</div>` : ""}
+
   <div class="deal-prices">
-    <span class="price-new">₹${formatPrice(d.newPrice)}</span>
-    <span class="price-old">₹${formatPrice(d.oldPrice)}</span>
+    <span class="new-price">₹${format(d.new)}</span>
+    <span class="old-price">₹${format(d.old)}</span>
+  </div>
+
+  <div class="deal-actions">
+    <a href="${d.link}" target="_blank" class="btn-buy"
+       onclick="trackClick('${escapeStr(d.title)}')">
+       🛒 Buy
+    </a>
+
+    <a href="${waLink}" target="_blank" class="btn-wa">📲</a>
   </div>
 </div>
-
-<a href="${d.link}" target="_blank" class="deal-cta">
-  🔥 Grab Deal
-</a>
 ```
 
   </div>
   `;
 }
 
-/* ========================= FILTER ========================= */
-function filterCategory(cat) {
-currentCategory = cat;
-
-filteredDeals = allDeals.filter(d => {
-return cat === "All" || d.category.toLowerCase() === cat.toLowerCase();
-});
-
-visibleCount = 8;
-updateDealCount();
+/* ================= LOAD MORE ================= */
+function loadMore() {
+visibleCount += 12;
 renderDeals();
 }
 
-/* ========================= LOAD MORE ========================= */
-function loadMoreDeals() {
-visibleCount += 8;
+/* ================= COUNT ================= */
+function updateCount() {
+document.getElementById("dealCount").innerText =
+`${filteredDeals.length} deals`;
+}
+
+/* ================= SEARCH ================= */
+function handleSearch(q) {
+const query = q.toLowerCase();
+
+filteredDeals = allDeals.filter(d =>
+d.title.toLowerCase().includes(query)
+);
+
+visibleCount = 12;
+renderDeals();
+updateCount();
+}
+
+/* ================= SORT ================= */
+function applyFilters() {
+const val = document.getElementById("filterSort").value;
+
+if (val === "discount") {
+filteredDeals.sort((a,b) => b.discount - a.discount);
+} else {
+filteredDeals.reverse(); // latest
+}
+
 renderDeals();
 }
 
-/* ========================= COUNT ========================= */
-function updateDealCount() {
-const el = document.getElementById("dealCount");
-if (el) el.textContent = `${filteredDeals.length} deals`;
+/* ================= TRACKING ================= */
+function trackClick(title) {
+console.log("Clicked:", title);
+
+// Optional: send to Google Sheet later
 }
 
-/* ========================= HELPERS ========================= */
-function formatPrice(n) {
-return Number(n).toLocaleString("en-IN");
+/* ================= HELPERS ================= */
+function format(num) {
+return Number(num).toLocaleString("en-IN");
 }
 
-/* ========================= INIT ========================= */
-document.addEventListener("DOMContentLoaded", () => {
-loadDeals();
-});
+function escapeStr(str) {
+return str.replace(/'/g, "\'");
+}
+
+/* ================= INIT ================= */
+document.addEventListener("DOMContentLoaded", loadDeals);
