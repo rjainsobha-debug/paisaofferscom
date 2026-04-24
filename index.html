@@ -12,69 +12,84 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="India's best cashback, deals & coupons platform. Save money and earn cashback on every purchase at Amazon, Flipkart, Myntra and 500+ stores.">
-  <meta property="og:title" content="PaisaOffers - Paisa Bachao, Paisa Kamao!">
-  <meta property="og:description" content="India's best cashback & deals platform. Earn 1.25% cashback on every order!">
+
+  <!-- ✅ SEO: Deals-focused meta (CHANGED from cashback) -->
+  <meta name="description" content="Best deals in India today! Handpicked offers on Amazon & Flipkart — up to 80% OFF. Electronics, Fashion, Home & more. Updated every few minutes.">
+  <meta name="keywords" content="deals today india, amazon deals, flipkart offers, best price, discount deals, loot deals, hot deals, paisaoffers">
+  <meta property="og:title" content="PaisaOffers — Today's Best Deals in India 🔥">
+  <meta property="og:description" content="Handpicked deals from Amazon, Flipkart & 500+ stores. Up to 80% OFF — updated every few minutes.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://paisaoffers.com">
+  <meta property="og:image" content="https://paisaoffers.com/opengraph.jpg">
+  <meta name="twitter:card" content="summary_large_image">
 
-  <title>PaisaOffers.com - Paisa Bachao, Paisa Kamao!</title>
+  <!-- ✅ Schema for Product Deals (SEO boost) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PaisaOffers",
+    "url": "https://paisaoffers.com",
+    "description": "India's best deals discovery platform. Handpicked offers from Amazon, Flipkart and 500+ stores.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://paisaoffers.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <title>PaisaOffers — Best Deals in India | Amazon & Flipkart Offers Today</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 
-<!-- ── TICKER ───────────────────────────────────────────────── -->
+<!-- ✅ STICKY TELEGRAM BAR (NEW — replaces cashback promo) -->
+<div class="tg-bar" id="tgBar">
+  <span>📲 <strong>Get LIVE Deals on Telegram!</strong> — Join 1 Lakh+ savers getting instant deal alerts</span>
+  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="tg-bar-btn" onclick="trackEvent('telegram_click','Top Bar')">
+    <i class="fab fa-telegram"></i> Join Free
+  </a>
+  <button class="tg-bar-close" onclick="document.getElementById('tgBar').style.display='none'" aria-label="Close">×</button>
+</div>
+
+<!-- ✅ TICKER — removed cashback text -->
 <div class="ticker-wrap">
-  <div class="ticker-content">
-    🔥 Amazon Sale LIVE &nbsp;|&nbsp; Flipkart Loot Deals &nbsp;|&nbsp; Earn 1.25% Cashback &nbsp;|&nbsp; 100% Cashback Offers &nbsp;|&nbsp; Join Telegram for Best Deals &nbsp;|&nbsp;
-    🔥 Amazon Sale LIVE &nbsp;|&nbsp; Flipkart Loot Deals &nbsp;|&nbsp; Earn 1.25% Cashback &nbsp;|&nbsp; 100% Cashback Offers &nbsp;|&nbsp; Join Telegram for Best Deals &nbsp;|&nbsp;
+  <div class="ticker-content" id="tickerContent">
+    🔥 Amazon Sale LIVE &nbsp;|&nbsp; Flipkart Loot Deals &nbsp;|&nbsp; Up to 80% OFF Electronics &nbsp;|&nbsp; Hidden Deals Updated Every Few Minutes &nbsp;|&nbsp; 📲 Join Telegram for Instant Alerts &nbsp;|&nbsp;
+    🔥 Amazon Sale LIVE &nbsp;|&nbsp; Flipkart Loot Deals &nbsp;|&nbsp; Up to 80% OFF Electronics &nbsp;|&nbsp; Hidden Deals Updated Every Few Minutes &nbsp;|&nbsp; 📲 Join Telegram for Instant Alerts &nbsp;|&nbsp;
   </div>
 </div>
 
-<!-- ── NAVBAR ───────────────────────────────────────────────── -->
+<!-- ✅ NAVBAR — removed login/signup/wallet, kept clean deals nav -->
 <header class="navbar" id="navbar">
   <div class="container nav-container">
     <a href="#" class="logo">
-      <span class="logo-icon">💰</span>
+      <span class="logo-icon">⚡</span>
       <span class="logo-text">PaisaOffers</span>
     </a>
 
     <nav class="nav-links" id="nav-links">
-      <a href="#deals">Deals</a>
-      <a href="#coupons">Coupons</a>
-      <a href="#cashback">Cashback</a>
-      <a href="#stores">Stores</a>
-      <a href="#categories">Categories</a>
-      <a href="https://t.me/paisaoffersdotcom" target="_blank" class="nav-telegram"><i class="fab fa-telegram"></i> Telegram</a>
+      <a href="#deals" class="nav-active">🔥 Deals</a>
+      <a href="#trending">⚡ Trending</a>
+      <a href="#categories">🗂 Categories</a>
+      <a href="#coupons">🎟 Coupons</a>
+      <a href="https://t.me/paisaoffersdotcom" target="_blank" class="nav-telegram" onclick="trackEvent('telegram_click','Navbar')">
+        <i class="fab fa-telegram"></i> Telegram
+      </a>
     </nav>
 
     <div class="nav-right">
       <div class="search-wrap">
         <i class="fas fa-search search-icon"></i>
-        <input type="search" id="searchInput" placeholder="Search deals..." class="search-input" autocomplete="off">
+        <input type="search" id="searchInput" placeholder="Search deals, stores..." class="search-input" autocomplete="off">
         <div class="search-dropdown" id="searchDropdown"></div>
       </div>
-
-      <!-- User menu (shown when logged in) -->
-      <div id="userMenu" style="display:none; align-items:center; gap:8px;">
-        <div class="wallet-chip" id="walletBtn" title="Open Wallet">
-          💰 <span id="navWalletBal">₹0</span>
-        </div>
-        <div class="user-avatar" title="Account">
-          <span id="navUserName">U</span>
-        </div>
-        <button class="btn btn-sm btn-outline" id="logoutBtn">Logout</button>
-      </div>
-
-      <!-- Guest buttons -->
-      <button class="btn btn-outline" id="loginBtnNav">Login</button>
-      <button class="btn btn-primary" id="signupBtnNav">Sign Up</button>
-
       <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -82,70 +97,70 @@
   </div>
 </header>
 
-<!-- ── TRENDING DEALS ────────────────────────────────────────── -->
-<section class="deals-section">
-  <div class="container">
-    <div class="section-header with-action">
-      <div>
-        <h2>🔥 Aaj Ki Best Deals</h2>
-        <p>Handpicked hot deals updated daily</p>
-      </div>
-      <button class="btn btn-outline" onclick="loadMoreDeals()">View All</button>
-    </div>
-    <div class="deals-grid" id="dealsGrid">
-      <div class="loading-spinner">
-        <div class="spinner"></div>
-        <p>Loading amazing deals...</p>
-      </div>
-    </div>
-    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
-      <button class="btn btn-outline btn-lg" onclick="loadMoreDeals()">Load More Deals</button>
-    </div>
-  </div>
-</section>
-
-<!-- ── HERO CAROUSEL ────────────────────────────────────────── -->
+<!-- ✅ HERO CAROUSEL — fully replaced, no cashback slides -->
 <section class="hero" id="hero">
   <div class="carousel" id="carousel">
     <div class="carousel-track" id="carouselTrack">
+
+      <!-- Slide 1: Hot Deals -->
       <div class="slide slide-1">
         <div class="slide-content">
-          <span class="slide-badge">LIMITED TIME</span>
-          <h1>Earn 1.25% Cashback<br>on Every Order!</h1>
-          <p>Real cashback — straight to your wallet. Join 50 Lakh+ happy savers.</p>
+          <span class="slide-badge pulse">🔥 LIVE NOW</span>
+          <h1>Today's Hottest Deals<br><span class="highlight-text">Handpicked & Verified</span></h1>
+          <p>Fresh deals from Amazon, Flipkart & 500+ stores — updated every few minutes. Don't miss out!</p>
           <div class="hero-btns">
-            <button class="btn btn-primary btn-lg" onclick="document.getElementById('signupBtnNav').click()">Get Started Free</button>
-            <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn btn-outline-white btn-lg" onclick="trackEvent('deal_click','Hero Telegram')">
-              <i class="fab fa-telegram"></i> Join Telegram
+            <button class="btn btn-primary btn-lg" onclick="document.getElementById('deals').scrollIntoView({behavior:'smooth'})">
+              🔥 Grab Today's Deals
+            </button>
+            <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn btn-outline-white btn-lg" onclick="trackEvent('telegram_click','Hero Slide 1')">
+              <i class="fab fa-telegram"></i> Get Instant Alerts
             </a>
           </div>
+          <div class="hero-stats-mini">
+            <div class="hstat"><strong id="heroTotalDeals">500+</strong><span>Live Deals</span></div>
+            <div class="hstat"><strong>80%</strong><span>Max Discount</span></div>
+            <div class="hstat"><strong>Every</strong><span>Few Mins</span></div>
+          </div>
         </div>
       </div>
+
+      <!-- Slide 2: Amazon/Flipkart Deals -->
       <div class="slide slide-2">
         <div class="slide-content">
-          <span class="slide-badge">AMAZON SALE</span>
-          <h1>Up to 80% OFF on<br>Electronics & Gadgets!</h1>
-          <p>Best prices on mobiles, laptops, TVs and accessories.</p>
+          <span class="slide-badge">💸 SAVINGS ALERT</span>
+          <h1>Save Big on Amazon<br><span class="highlight-text">& Flipkart Today!</span></h1>
+          <p>Up to 80% OFF on Mobiles, Laptops, TVs, Fashion & Home. Hidden deals you won't find easily!</p>
           <div class="hero-btns">
-            <a href="https://amzn.to/4t7XSrt" target="_blank" class="btn btn-primary btn-lg" onclick="trackEvent('deal_click','Hero Amazon')">Shop Now on Amazon</a>
-            <button class="btn btn-outline-white btn-lg" onclick="document.getElementById('deals').scrollIntoView({behavior:'smooth'})">View All Deals</button>
+            <a href="https://amzn.to/4t7XSrt" target="_blank" class="btn btn-primary btn-lg" onclick="trackEvent('deal_click','Hero Amazon')">
+              Shop Amazon Deals
+            </a>
+            <button class="btn btn-outline-white btn-lg" onclick="filterCategory('Electronics'); document.getElementById('deals').scrollIntoView({behavior:'smooth'})">
+              View Electronics
+            </button>
           </div>
         </div>
       </div>
+
+      <!-- Slide 3: Telegram Join (CHANGED from cashback) -->
       <div class="slide slide-3">
         <div class="slide-content">
-          <span class="slide-badge">CASHBACK</span>
-          <h1>Submit Order &<br>Earn Real Cashback!</h1>
-          <p>Every purchase earns you 1.25% back. Withdraw via UPI.</p>
+          <span class="slide-badge">📲 INSTANT ALERTS</span>
+          <h1>Never Miss a<br><span class="highlight-text">Loot Deal Again!</span></h1>
+          <p>Join our Telegram channel and get deal alerts before they expire. 1 Lakh+ savers already inside!</p>
           <div class="hero-btns">
-            <button class="btn btn-primary btn-lg" onclick="openWalletModal()">Claim Cashback</button>
-            <button class="btn btn-outline-white btn-lg" onclick="document.getElementById('stores').scrollIntoView({behavior:'smooth'})">Explore Stores</button>
+            <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn btn-primary btn-lg btn-tg" onclick="trackEvent('telegram_click','Hero Slide 3')">
+              <i class="fab fa-telegram"></i> Join Telegram — It's Free!
+            </a>
+            <button class="btn btn-outline-white btn-lg" onclick="document.getElementById('deals').scrollIntoView({behavior:'smooth'})">
+              Browse Deals Now
+            </button>
           </div>
         </div>
       </div>
+
     </div>
-    <button class="carousel-btn prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
-    <button class="carousel-btn next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+    <button class="carousel-btn prev" id="prevBtn" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+    <button class="carousel-btn next" id="nextBtn" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
     <div class="carousel-dots" id="carouselDots">
       <span class="dot active" onclick="goToSlide(0)"></span>
       <span class="dot" onclick="goToSlide(1)"></span>
@@ -154,610 +169,324 @@
   </div>
 </section>
 
-<!-- ── STATS ────────────────────────────────────────────────── -->
+<!-- ✅ STATS — changed to deals-focused (REMOVED cashback stats) -->
 <section class="stats-section">
   <div class="container">
     <div class="stats-grid">
       <div class="stat-item">
-        <div class="stat-number" data-target="10">0</div>
-        <div class="stat-suffix">Crore+</div>
-        <div class="stat-label">Cashback Paid</div>
+        <div class="stat-icon">🔥</div>
+        <div class="stat-number" data-target="1000">0</div>
+        <div class="stat-suffix">+</div>
+        <div class="stat-label">Daily Deals</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number" data-target="50">0</div>
-        <div class="stat-suffix">Lakh+</div>
-        <div class="stat-label">Happy Users</div>
+        <div class="stat-icon">⚡</div>
+        <div class="stat-number" data-target="80">0</div>
+        <div class="stat-suffix">%</div>
+        <div class="stat-label">Max Discount</div>
       </div>
       <div class="stat-item">
+        <div class="stat-icon">🏪</div>
         <div class="stat-number" data-target="500">0</div>
         <div class="stat-suffix">+</div>
         <div class="stat-label">Partner Stores</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number" data-target="1000">0</div>
-        <div class="stat-suffix">+</div>
-        <div class="stat-label">Daily Deals</div>
+        <div class="stat-icon">👥</div>
+        <div class="stat-number" data-target="1">0</div>
+        <div class="stat-suffix">L+</div>
+        <div class="stat-label">Telegram Members</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── HOW IT WORKS ─────────────────────────────────────────── -->
-<section class="how-section">
-  <div class="container">
-    <div class="section-header">
-      <h2>How It Works</h2>
-      <p>Earn real cashback in 3 simple steps</p>
-    </div>
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-icon">🔍</div>
-        <div class="step-num">01</div>
-        <h3>Find a Deal</h3>
-        <p>Browse 1000+ daily deals from Amazon, Flipkart, Myntra & more</p>
-      </div>
-      <div class="step-card">
-        <div class="step-icon">🛒</div>
-        <div class="step-num">02</div>
-        <h3>Shop & Submit</h3>
-        <p>Click our deal link, complete purchase, then submit your order ID</p>
-      </div>
-      <div class="step-card">
-        <div class="step-icon">💰</div>
-        <div class="step-num">03</div>
-        <h3>Earn 1.25% Back</h3>
-        <p>Cashback approved within 48 hours. Withdraw to UPI anytime!</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CATEGORIES ───────────────────────────────────────────── -->
+<!-- ✅ CATEGORY PILLS — KEPT + improved UI -->
 <section class="categories-section" id="categories">
   <div class="container">
-    <div class="section-header">
-      <h2>Browse by Category</h2>
-      <p>Find deals in your favourite category</p>
-    </div>
-    <div class="categories-grid">
-      <button class="category-chip active" onclick="filterCategory('All')"><span class="cat-icon">🏷️</span> All</button>
-      <button class="category-chip" onclick="filterCategory('Electronics')"><span class="cat-icon">📱</span> Electronics</button>
-      <button class="category-chip" onclick="filterCategory('Fashion')"><span class="cat-icon">👗</span> Fashion</button>
-      <button class="category-chip" onclick="filterCategory('Home')"><span class="cat-icon">🏠</span> Home & Kitchen</button>
-      <button class="category-chip" onclick="filterCategory('Beauty')"><span class="cat-icon">💄</span> Beauty</button>
-      <button class="category-chip" onclick="filterCategory('Sports')"><span class="cat-icon">⚽</span> Sports</button>
-      <button class="category-chip" onclick="filterCategory('Books')"><span class="cat-icon">📚</span> Books</button>
-      <button class="category-chip" onclick="filterCategory('Grocery')"><span class="cat-icon">🛒</span> Grocery</button>
+    <div class="categories-scroll">
+      <button class="category-chip active" onclick="filterCategory('All')">🛍 All Deals</button>
+      <button class="category-chip" onclick="filterCategory('Electronics')">📱 Electronics</button>
+      <button class="category-chip" onclick="filterCategory('Fashion')">👗 Fashion</button>
+      <button class="category-chip" onclick="filterCategory('Home')">🏠 Home & Kitchen</button>
+      <button class="category-chip" onclick="filterCategory('Beauty')">💄 Beauty</button>
+      <button class="category-chip" onclick="filterCategory('Sports')">🏋️ Sports</button>
+      <button class="category-chip" onclick="filterCategory('Books')">📚 Books</button>
+      <button class="category-chip" onclick="filterCategory('Grocery')">🛒 Grocery</button>
+      <button class="category-chip" onclick="filterCategory('Travel')">✈️ Travel</button>
+      <button class="category-chip" onclick="filterCategory('Mobiles')">📲 Mobiles</button>
     </div>
   </div>
 </section>
 
-<!-- ── FILTERS ──────────────────────────────────────────────── -->
-<section class="filters-section" id="deals">
+<!-- ✅ TRENDING DEALS RAIL (NEW) -->
+<section class="trending-section" id="trending">
   <div class="container">
-    <div class="filters-bar">
-      <div class="filter-group">
-        <label>Store:</label>
-        <select id="filterStore" onchange="applyFilters()">
+    <div class="section-header">
+      <div>
+        <h2>⚡ Trending Right Now</h2>
+        <p>Most clicked deals in the last hour</p>
+      </div>
+    </div>
+    <div class="trending-rail" id="trendingRail">
+      <div class="loading-shimmer-row">
+        <div class="shimmer-card"></div>
+        <div class="shimmer-card"></div>
+        <div class="shimmer-card"></div>
+        <div class="shimmer-card"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ✅ MAIN DEALS SECTION — kept structure, improved header -->
+<section class="deals-section" id="deals">
+  <div class="container">
+    <div class="deals-toolbar">
+      <div class="deals-toolbar-left">
+        <h2>🔥 All Deals</h2>
+        <span class="deal-count-badge" id="dealCount">Loading...</span>
+      </div>
+      <div class="deals-toolbar-right">
+        <!-- Sort -->
+        <select id="filterSort" class="filter-select" onchange="applyFilters()">
+          <option value="latest">🕐 Latest First</option>
+          <option value="discount">💸 Top Discounts</option>
+          <option value="ending">⏰ Ending Soon</option>
+        </select>
+        <!-- Store filter -->
+        <select id="filterStore" class="filter-select" onchange="applyFilters()">
           <option value="All">All Stores</option>
           <option value="Amazon">Amazon</option>
           <option value="Flipkart">Flipkart</option>
           <option value="Myntra">Myntra</option>
-          <option value="Ajio">Ajio</option>
+          <option value="Meesho">Meesho</option>
+        </select>
+        <!-- Discount filter -->
+        <select id="filterDiscount" class="filter-select" onchange="applyFilters()">
+          <option value="0">All Discounts</option>
+          <option value="50">50%+ OFF</option>
+          <option value="60">60%+ OFF</option>
+          <option value="70">70%+ OFF</option>
+          <option value="80">80%+ OFF</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Min Discount:</label>
-        <select id="filterDiscount" onchange="applyFilters()">
-          <option value="0">Any</option>
-          <option value="20">20%+</option>
-          <option value="40">40%+</option>
-          <option value="60">60%+</option>
-          <option value="70">70%+</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Sort:</label>
-        <select id="filterSort" onchange="applyFilters()">
-          <option value="latest">Latest</option>
-          <option value="popular">Most Popular</option>
-          <option value="discount">Highest Discount</option>
-          <option value="ending">Ending Soon</option>
-        </select>
-      </div>
-      <div class="filter-results">
-        <span id="dealCount">Loading deals...</span>
-      </div>
     </div>
-  </div>
-</section>
 
-<!-- ── EDITOR'S PICKS ───────────────────────────────────────── -->
-<section class="deals-section editors-picks" id="editorsPicks" style="background:#f0f4ff">
-  <div class="container">
-    <div class="section-header">
-      <h2>⭐ Editor's Picks</h2>
-      <p>Curated by our deal experts</p>
+    <!-- ✅ Main Deals Grid -->
+    <div class="deals-grid" id="dealsGrid">
+      <!-- Loading shimmer cards -->
+      <div class="shimmer-card deal-shimmer"></div>
+      <div class="shimmer-card deal-shimmer"></div>
+      <div class="shimmer-card deal-shimmer"></div>
+      <div class="shimmer-card deal-shimmer"></div>
+      <div class="shimmer-card deal-shimmer"></div>
+      <div class="shimmer-card deal-shimmer"></div>
     </div>
-    <div class="deals-grid" id="editorDealsGrid"></div>
-  </div>
-</section>
 
-<!-- ── CASHBACK STORES ──────────────────────────────────────── -->
-<section class="stores-section" id="stores">
-  <div class="container">
-    <div class="section-header">
-      <h2>💳 Top Cashback Stores</h2>
-      <p>Earn cashback on every purchase</p>
-    </div>
-    <div class="stores-grid">
-      <a href="https://amzn.to/4t7XSrt" target="_blank" class="store-card" onclick="trackEvent('deal_click','Store Amazon')">
-        <div class="store-logo amazon">Amazon</div>
-        <div class="store-info">
-          <div class="store-cashback">Up to 8% Cashback</div>
-          <div class="store-products">1000+ Products</div>
-        </div>
-        <span class="store-btn">Shop Now</span>
-      </a>
-      <a href="https://amzn.to/4voS5PM" target="_blank" class="store-card" onclick="trackEvent('deal_click','Store Flipkart')">
-        <div class="store-logo flipkart">Flipkart</div>
-        <div class="store-info">
-          <div class="store-cashback">Up to 6% Cashback</div>
-          <div class="store-products">800+ Products</div>
-        </div>
-        <span class="store-btn">Shop Now</span>
-      </a>
-      <a href="https://amzn.to/4tJGSaX" target="_blank" class="store-card" onclick="trackEvent('deal_click','Store Myntra')">
-        <div class="store-logo myntra">Myntra</div>
-        <div class="store-info">
-          <div class="store-cashback">Up to 10% Cashback</div>
-          <div class="store-products">500+ Products</div>
-        </div>
-        <span class="store-btn">Shop Now</span>
-      </a>
-      <div class="store-card">
-        <div class="store-logo ajio">Ajio</div>
-        <div class="store-info">
-          <div class="store-cashback">Up to 12% Cashback</div>
-          <div class="store-products">600+ Products</div>
-        </div>
-        <span class="store-btn">Shop Now</span>
-      </div>
-      <div class="store-card">
-        <div class="store-logo swiggy">Swiggy</div>
-        <div class="store-info">
-          <div class="store-cashback">Up to 5% Cashback</div>
-          <div class="store-products">Food Orders</div>
-        </div>
-        <span class="store-btn">Shop Now</span>
-      </div>
-      <div class="store-card">
-        <div class="store-logo zomato">Zomato</div>
-        <div class="store-info">
-          <div class="store-cashback">Up to 4% Cashback</div>
-          <div class="store-products">Food Orders</div>
-        </div>
-        <span class="store-btn">Shop Now</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── COUPONS ──────────────────────────────────────────────── -->
-<section class="coupons-section" id="coupons">
-  <div class="container">
-    <div class="section-header">
-      <h2>🎟️ Today's Best Coupon Codes</h2>
-      <p>Copy and save instantly</p>
-    </div>
-    <div class="coupons-grid">
-      <div class="coupon-card">
-        <div class="coupon-store">✈️ Flights</div>
-        <div class="coupon-desc">Flat ₹500 OFF on All Flights</div>
-        <div class="coupon-validity">Valid till 30 Apr 2026</div>
-        <div class="coupon-code-wrap">
-          <span class="coupon-code" id="code1">SAVE500</span>
-          <button class="copy-btn" onclick="copyCode('SAVE500','code1',this)"><i class="fas fa-copy"></i> Copy</button>
-        </div>
-      </div>
-      <div class="coupon-card">
-        <div class="coupon-store">🍔 Food</div>
-        <div class="coupon-desc">50% OFF on Food Orders (Max ₹100)</div>
-        <div class="coupon-validity">Valid till 25 Apr 2026</div>
-        <div class="coupon-code-wrap">
-          <span class="coupon-code" id="code2">FOOD50</span>
-          <button class="copy-btn" onclick="copyCode('FOOD50','code2',this)"><i class="fas fa-copy"></i> Copy</button>
-        </div>
-      </div>
-      <div class="coupon-card">
-        <div class="coupon-store">🛍️ Amazon</div>
-        <div class="coupon-desc">Extra 10% OFF on Electronics</div>
-        <div class="coupon-validity">Valid till 20 Apr 2026</div>
-        <div class="coupon-code-wrap">
-          <span class="coupon-code" id="code3">AMZN10</span>
-          <button class="copy-btn" onclick="copyCode('AMZN10','code3',this)"><i class="fas fa-copy"></i> Copy</button>
-        </div>
-      </div>
-      <div class="coupon-card">
-        <div class="coupon-store">👗 Myntra</div>
-        <div class="coupon-desc">Flat ₹300 OFF on Fashion above ₹1499</div>
-        <div class="coupon-validity">Valid till 25 Apr 2026</div>
-        <div class="coupon-code-wrap">
-          <span class="coupon-code" id="code4">MYNTRA300</span>
-          <button class="copy-btn" onclick="copyCode('MYNTRA300','code4',this)"><i class="fas fa-copy"></i> Copy</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CASHBACK WALLET CTA ──────────────────────────────────── -->
-<section class="cashback-section" id="cashback">
-  <div class="container">
-    <div class="cashback-card">
-      <div class="cashback-left">
-        <h2>Your Cashback = Real Money 💸</h2>
-        <p>Every rupee you earn is real — withdraw directly to your UPI or bank account.</p>
-        <ul class="cashback-benefits">
-          <li><i class="fas fa-check-circle"></i> Instant UPI Withdrawal</li>
-          <li><i class="fas fa-check-circle"></i> Earn 1.25% on Every Order</li>
-          <li><i class="fas fa-check-circle"></i> Max ₹100 Cashback per Order</li>
-        </ul>
-        <button class="btn btn-primary btn-lg" onclick="openWalletModal()">Open My Wallet</button>
-      </div>
-      <div class="cashback-right">
-        <div class="wallet-mockup">
-          <div class="wallet-balance">₹1,245.50</div>
-          <div class="wallet-label">Your Cashback Balance</div>
-          <div class="wallet-breakdown">
-            <div class="wallet-row"><span>Amazon</span><span class="green">+₹450</span></div>
-            <div class="wallet-row"><span>Flipkart</span><span class="green">+₹320</span></div>
-            <div class="wallet-row"><span>Myntra</span><span class="green">+₹475</span></div>
-          </div>
-          <button class="wallet-withdraw" onclick="openWalletModal()">Withdraw Now</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── REFERRAL ─────────────────────────────────────────────── -->
-<section class="referral-section">
-  <div class="container">
-    <div class="referral-card">
-      <div class="referral-icon">👥</div>
-      <h2>Refer & Earn ₹100</h2>
-      <p>Invite friends and earn ₹100 for every friend who joins. No limit on referrals!</p>
-      <button class="btn btn-primary btn-lg" onclick="trackEvent('signup_click','Referral CTA')">
-        <i class="fas fa-share-alt"></i> Start Referring
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="btn btn-load-more" onclick="loadMoreDeals()">
+        <i class="fas fa-plus-circle"></i> Load More Deals
       </button>
     </div>
   </div>
 </section>
 
-<!-- ── TESTIMONIALS ─────────────────────────────────────────── -->
-<section class="testimonials-section">
+<!-- ✅ TOP DISCOUNTS SECTION (NEW) -->
+<section class="editor-section" id="topDiscounts">
   <div class="container">
-    <div class="section-header">
-      <h2>❤️ Log Kya Kehte Hain?</h2>
-      <p>Real reviews from our happy users</p>
+    <div class="section-header with-action">
+      <div>
+        <h2>💸 Top Discounts Today</h2>
+        <p>Highest savings available right now</p>
+      </div>
     </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"₹450 cashback mila pehle order pe! Amazon se phone liya aur seedha paisa wapas aa gaya!"</p>
-        <div class="reviewer">
-          <div class="reviewer-avatar">P</div>
-          <div><strong>Priya Sharma</strong><span>Delhi, Amazon User</span></div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"Bhai ye app toh life changer hai! Har mahine ₹800-1000 cashback aa jata hai. Must use!"</p>
-        <div class="reviewer">
-          <div class="reviewer-avatar">R</div>
-          <div><strong>Rahul Kumar</strong><span>Mumbai, Flipkart User</span></div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"Myntra se saree kharidii aur 10% cashback toh ekdum smooth mila. Super reliable!"</p>
-        <div class="reviewer">
-          <div class="reviewer-avatar">A</div>
-          <div><strong>Anjali Verma</strong><span>Jaipur, Myntra User</span></div>
-        </div>
-      </div>
+    <div class="deals-grid editor-grid" id="editorDealsGrid">
+      <div class="shimmer-card deal-shimmer"></div>
+      <div class="shimmer-card deal-shimmer"></div>
+      <div class="shimmer-card deal-shimmer"></div>
+      <div class="shimmer-card deal-shimmer"></div>
     </div>
   </div>
 </section>
 
-<!-- ── TELEGRAM CTA ─────────────────────────────────────────── -->
-<section class="telegram-cta-section">
+<!-- ✅ STORES SECTION — kept, cleaned up -->
+<section class="stores-section" id="stores">
   <div class="container">
-    <div class="telegram-cta-card">
-      <div class="telegram-icon-large"><i class="fab fa-telegram"></i></div>
-      <div class="telegram-cta-text">
-        <h2>Never Miss a Deal Again!</h2>
-        <p>Join our Telegram channel for instant deal alerts, exclusive cashback offers, and flash sales.</p>
-        <div class="telegram-stats">
-          <span>50K+ Members</span><span>•</span>
-          <span>100+ Deals/Day</span><span>•</span>
-          <span>Free Forever</span>
-        </div>
-      </div>
-      <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn btn-telegram btn-lg" onclick="trackEvent('deal_click','Telegram CTA')">
-        <i class="fab fa-telegram"></i> Join Now — It's Free!
+    <div class="section-header">
+      <h2>🏪 Top Stores</h2>
+      <p>Deals from your favourite stores</p>
+    </div>
+    <div class="stores-grid">
+      <a href="https://amzn.to/4t7XSrt" target="_blank" class="store-card" onclick="trackEvent('deal_click','Store Amazon')">
+        <div class="store-logo">🛒</div>
+        <div class="store-name">Amazon</div>
+        <div class="store-badge">Up to 80% OFF</div>
+      </a>
+      <a href="#" onclick="filterCategory('All'); document.getElementById('deals').scrollIntoView({behavior:'smooth'}); return false;" class="store-card">
+        <div class="store-logo">🎯</div>
+        <div class="store-name">Flipkart</div>
+        <div class="store-badge">Super Saver</div>
+      </a>
+      <a href="#" onclick="filterCategory('Fashion'); document.getElementById('deals').scrollIntoView({behavior:'smooth'}); return false;" class="store-card">
+        <div class="store-logo">👗</div>
+        <div class="store-name">Myntra</div>
+        <div class="store-badge">Fashion Deals</div>
+      </a>
+      <a href="#" onclick="filterCategory('All'); document.getElementById('deals').scrollIntoView({behavior:'smooth'}); return false;" class="store-card">
+        <div class="store-logo">📦</div>
+        <div class="store-name">Meesho</div>
+        <div class="store-badge">Low Prices</div>
+      </a>
+      <a href="#" onclick="filterCategory('Grocery'); document.getElementById('deals').scrollIntoView({behavior:'smooth'}); return false;" class="store-card">
+        <div class="store-logo">🥦</div>
+        <div class="store-name">BigBasket</div>
+        <div class="store-badge">Fresh Deals</div>
+      </a>
+      <a href="#" onclick="filterCategory('All'); document.getElementById('deals').scrollIntoView({behavior:'smooth'}); return false;" class="store-card">
+        <div class="store-logo">💊</div>
+        <div class="store-name">1mg</div>
+        <div class="store-badge">Health Deals</div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ── NEWSLETTER ───────────────────────────────────────────── -->
-<section class="newsletter-section">
+<!-- ✅ COUPONS SECTION — KEPT -->
+<section class="coupons-section" id="coupons">
   <div class="container">
-    <div class="newsletter-card">
-      <div class="newsletter-text">
-        <h2>📩 Best Deals, Directly in Your Inbox</h2>
-        <p>Subscribe and get daily deals, cashback alerts, and exclusive offers.</p>
+    <div class="section-header">
+      <h2>🎟 Active Coupons</h2>
+      <p>Copy & apply these codes at checkout for extra savings</p>
+    </div>
+    <div class="coupons-grid" id="couponsGrid">
+      <div class="coupon-card">
+        <div class="coupon-store">Amazon</div>
+        <div class="coupon-title">Extra 10% OFF on Electronics</div>
+        <div class="coupon-code-wrap">
+          <span class="coupon-code" id="coupon-AMZTECH10">AMZTECH10</span>
+          <button class="copy-btn" onclick="copyCoupon('AMZTECH10')"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+        <div class="coupon-exp">Valid: Electronics Category</div>
       </div>
-      <form class="newsletter-form" id="newsletterForm" onsubmit="subscribeNewsletter(event)">
-        <input type="email" id="newsletterEmail" placeholder="Enter your email address" required>
-        <button type="submit" class="btn btn-primary">Subscribe Free</button>
-      </form>
-      <div class="newsletter-success" id="newsletterSuccess" style="display:none">
-        ✅ You're subscribed! Watch your inbox for amazing deals.
+      <div class="coupon-card">
+        <div class="coupon-store">Flipkart</div>
+        <div class="coupon-title">Flat ₹200 OFF on ₹999+</div>
+        <div class="coupon-code-wrap">
+          <span class="coupon-code" id="coupon-FK200OFF">FK200OFF</span>
+          <button class="copy-btn" onclick="copyCoupon('FK200OFF')"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+        <div class="coupon-exp">Valid: All Categories</div>
+      </div>
+      <div class="coupon-card">
+        <div class="coupon-store">Myntra</div>
+        <div class="coupon-title">30% OFF on First Order</div>
+        <div class="coupon-code-wrap">
+          <span class="coupon-code" id="coupon-MYNFIRST30">MYNFIRST30</span>
+          <button class="copy-btn" onclick="copyCoupon('MYNFIRST30')"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+        <div class="coupon-exp">Valid: New Users Only</div>
+      </div>
+      <div class="coupon-card">
+        <div class="coupon-store">Amazon</div>
+        <div class="coupon-title">Up to ₹500 OFF on Mobiles</div>
+        <div class="coupon-code-wrap">
+          <span class="coupon-code" id="coupon-MOB500">MOB500</span>
+          <button class="copy-btn" onclick="copyCoupon('MOB500')"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+        <div class="coupon-exp">Valid: Smartphones</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── FOOTER ───────────────────────────────────────────────── -->
+<!-- ✅ TELEGRAM CTA SECTION (NEW — replaces "How it Works" cashback steps) -->
+<section class="tg-cta-section">
+  <div class="container">
+    <div class="tg-cta-card">
+      <div class="tg-cta-left">
+        <div class="tg-cta-icon">📲</div>
+        <div>
+          <h3>Never Miss a Deal Again!</h3>
+          <p>Join our Telegram channel for instant alerts on <strong>🔥 loot deals, flash sales & hidden discounts</strong> before they expire.</p>
+          <div class="tg-features">
+            <span>✅ Free to join</span>
+            <span>✅ No spam</span>
+            <span>✅ Instant notifications</span>
+            <span>✅ 1L+ members</span>
+          </div>
+        </div>
+      </div>
+      <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn btn-tg-big" onclick="trackEvent('telegram_click','CTA Section')">
+        <i class="fab fa-telegram"></i> Join Telegram Channel
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ✅ FOOTER — updated, removed cashback links -->
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="footer-logo">💰 PaisaOffers</div>
-        <p>India's #1 cashback & deals platform. Paisa Bachao, Paisa Kamao!</p>
-        <div class="social-links">
-          <a href="https://t.me/paisaoffersdotcom" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
-          <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <div class="footer-logo"><span>⚡</span> PaisaOffers</div>
+        <p>India's fastest deals discovery platform. Handpicked offers from Amazon, Flipkart & 500+ stores — updated every few minutes.</p>
+        <div class="footer-social">
+          <a href="https://t.me/paisaoffersdotcom" target="_blank" title="Telegram" onclick="trackEvent('telegram_click','Footer')"><i class="fab fa-telegram"></i></a>
           <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
           <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
       </div>
       <div class="footer-col">
         <h4>Quick Links</h4>
-        <ul>
-          <li><a href="#deals">Hot Deals</a></li>
-          <li><a href="#coupons">Coupon Codes</a></li>
-          <li><a href="#cashback">Cashback</a></li>
-          <li><a href="#stores">Stores</a></li>
-        </ul>
+        <a href="#deals">All Deals</a>
+        <a href="#trending">Trending</a>
+        <a href="#categories">Categories</a>
+        <a href="#coupons">Coupons</a>
+        <a href="https://t.me/paisaoffersdotcom" target="_blank">Telegram</a>
       </div>
       <div class="footer-col">
         <h4>Top Stores</h4>
-        <ul>
-          <li><a href="https://amzn.to/4t7XSrt" target="_blank">Amazon Deals</a></li>
-          <li><a href="https://amzn.to/4voS5PM" target="_blank">Flipkart Deals</a></li>
-          <li><a href="https://amzn.to/4tJGSaX" target="_blank">Myntra Deals</a></li>
-          <li><a href="#">Ajio Deals</a></li>
-        </ul>
+        <a href="https://amzn.to/4t7XSrt" target="_blank">Amazon Deals</a>
+        <a href="#" onclick="filterCategory('All'); return false;">Flipkart Deals</a>
+        <a href="#" onclick="filterCategory('Fashion'); return false;">Myntra Deals</a>
+        <a href="#" onclick="filterCategory('Grocery'); return false;">BigBasket Deals</a>
+        <a href="#" onclick="filterCategory('Electronics'); return false;">Electronics</a>
       </div>
       <div class="footer-col">
-        <h4>Help</h4>
-        <ul>
-          <li><a href="#">FAQs</a></li>
-          <li><a href="#">Contact Us</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-        </ul>
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Advertise</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 PaisaOffers.com 🇮🇳 | Made with ❤️ in India</p>
-      <p class="disclaimer">* Cashback & deals subject to terms. Prices may vary. Affiliate links may be used.</p>
+      <p>© 2025 PaisaOffers.com — All Rights Reserved</p>
+      <p class="disclaimer">* Deals are affiliate links. Prices may change. Always verify before purchasing.</p>
     </div>
   </div>
 </footer>
 
-<!-- ── FLOATING BUTTONS ─────────────────────────────────────── -->
-<div class="floating-buttons">
-  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="float-btn telegram-float" title="Join Telegram" onclick="trackEvent('deal_click','Float Telegram')">
+<!-- ✅ FLOATING ACTION BUTTONS (NEW — Telegram + WhatsApp) -->
+<div class="fab-group">
+  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="fab fab-telegram" title="Join Telegram" onclick="trackEvent('telegram_click','FAB')">
     <i class="fab fa-telegram"></i>
-    <span class="float-label">Telegram</span>
+    <span class="fab-label">Deals Channel</span>
   </a>
-  <a href="https://wa.me/?text=Check%20out%20PaisaOffers%20for%20amazing%20deals%20and%20cashback!%20https%3A%2F%2Fpaisaoffers.com" target="_blank" class="float-btn whatsapp-float" title="WhatsApp" onclick="trackEvent('deal_click','Float WhatsApp')">
+  <a href="https://wa.me/?text=Check%20out%20today%27s%20best%20deals%20on%20PaisaOffers.com%20-%20Up%20to%2080%25%20OFF!%20https%3A%2F%2Fpaisaoffers.com" target="_blank" class="fab fab-whatsapp" title="Share on WhatsApp" onclick="trackEvent('share_click','FAB WhatsApp')">
     <i class="fab fa-whatsapp"></i>
-    <span class="float-label">WhatsApp</span>
   </a>
 </div>
 
-<!-- ── TELEGRAM POPUP ───────────────────────────────────────── -->
-<div class="telegram-popup" id="telegramPopup">
-  <button class="popup-close" onclick="closePopup()"><i class="fas fa-times"></i></button>
-  <div class="popup-icon"><i class="fab fa-telegram"></i></div>
-  <h3>🔥 Best Deals on Telegram!</h3>
-  <p>Join 50K+ members getting exclusive deals daily. Don't miss out!</p>
-  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn btn-telegram btn-full" onclick="trackEvent('deal_click','Popup Telegram'); closePopup()">
-    Join @paisaoffersdotcom
-  </a>
-  <button class="popup-skip" onclick="closePopup()">Maybe Later</button>
-</div>
-<div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
-
-<!-- ── MOBILE BOTTOM NAV ────────────────────────────────────── -->
-<nav class="bottom-nav">
-  <a href="#" class="bottom-nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
-  <a href="#deals" class="bottom-nav-item"><i class="fas fa-fire"></i><span>Deals</span></a>
-  <a href="#coupons" class="bottom-nav-item"><i class="fas fa-ticket-alt"></i><span>Coupons</span></a>
-  <a href="#cashback" class="bottom-nav-item" onclick="openWalletModal(); return false;"><i class="fas fa-wallet"></i><span>Wallet</span></a>
-  <a href="#" class="bottom-nav-item" onclick="document.getElementById('loginBtnNav').click(); return false;"><i class="fas fa-user"></i><span>Account</span></a>
-</nav>
-
-<!-- ── BACK TO TOP ──────────────────────────────────────────── -->
-<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <i class="fas fa-chevron-up"></i>
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+  <i class="fas fa-arrow-up"></i>
 </button>
 
-<!-- ── AUTH MODAL ───────────────────────────────────────────── -->
-<div class="modal-overlay" id="authOverlay">
-  <div class="modal" id="authModal">
-    <div class="modal-header">
-      <h3>💰 PaisaOffers Account</h3>
-      <button class="modal-close" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="auth-tabs">
-      <button class="auth-tab-btn active" id="authTabLogin">Login</button>
-      <button class="auth-tab-btn" id="authTabSignup">Sign Up Free</button>
-    </div>
-
-    <!-- Login Form -->
-    <form class="auth-form" id="loginForm">
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="loginEmail" placeholder="your@email.com" required>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="loginPass" placeholder="••••••••" required>
-      </div>
-      <div class="form-error" id="loginError"></div>
-      <button type="submit" class="btn btn-primary btn-full">Login to Account</button>
-    </form>
-
-    <!-- Signup Form -->
-    <form class="auth-form hidden" id="signupForm">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="signupName" placeholder="Rahul Sharma" required>
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="signupEmail" placeholder="your@email.com" required>
-      </div>
-      <div class="form-group">
-        <label>Mobile (Optional)</label>
-        <input type="tel" id="signupMobile" placeholder="10-digit mobile number">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="signupPass" placeholder="Min 6 characters" minlength="6" required>
-      </div>
-      <div class="form-error" id="signupError"></div>
-      <button type="submit" class="btn btn-primary btn-full">Create Free Account</button>
-      <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:8px;">
-        By signing up, you agree to our Terms & Privacy Policy
-      </p>
-    </form>
-  </div>
-</div>
-
-<!-- ── WALLET MODAL ─────────────────────────────────────────── -->
-<div class="modal-overlay" id="walletOverlay">
-  <div class="modal wallet-modal" id="walletModal">
-    <div class="wallet-modal-header">
-      <button class="modal-close" onclick="closeWalletModal()"><i class="fas fa-times"></i></button>
-      <h3>💰 My Cashback Wallet</h3>
-      <p id="walletUserEmail">Loading...</p>
-    </div>
-
-    <!-- Wallet Stats -->
-    <div class="wallet-stats-grid">
-      <div class="wstat">
-        <div class="wstat-value" id="wTotalCb">₹0.00</div>
-        <div class="wstat-label">Total Earned</div>
-      </div>
-      <div class="wstat">
-        <div class="wstat-value" style="color:#f97316" id="wPending">₹0.00</div>
-        <div class="wstat-label">Pending</div>
-      </div>
-      <div class="wstat">
-        <div class="wstat-value green" id="wConfirmed">₹0.00</div>
-        <div class="wstat-label">Confirmed</div>
-      </div>
-      <div class="wstat">
-        <div class="wstat-value green" id="wWithdrawable">₹0.00</div>
-        <div class="wstat-label">Withdrawable</div>
-      </div>
-    </div>
-
-    <!-- Wallet Tabs -->
-    <div class="wallet-tabs">
-      <button class="wallet-tab-btn active" data-tab="overview">Overview</button>
-      <button class="wallet-tab-btn" data-tab="claim">Claim Cashback</button>
-      <button class="wallet-tab-btn" data-tab="transactions">History</button>
-      <button class="wallet-tab-btn" data-tab="withdraw">Withdraw</button>
-    </div>
-
-    <!-- Tab: Overview -->
-    <div class="wallet-tab-pane active" data-tab="overview">
-      <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">
-        Welcome, <strong id="walletUserName"></strong>! Earn 1.25% cashback on every order (max ₹100/order).
-      </p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="switchWalletTab('claim')">+ Claim Cashback</button>
-        <button class="btn btn-outline" onclick="switchWalletTab('withdraw')">Withdraw Funds</button>
-      </div>
-      <div style="margin-top:20px; padding:16px; background:#fff7ed; border-radius:12px; border:1px solid #fed7aa;">
-        <div style="font-weight:700; color:#f97316; margin-bottom:6px;">💡 How Cashback Works</div>
-        <div style="font-size:13px; color:#92400e; line-height:1.6;">
-          1. Click any deal and shop normally<br>
-          2. Submit your Order ID below<br>
-          3. We verify & approve within 48 hours<br>
-          4. Withdraw ₹500+ via UPI anytime!
-        </div>
-      </div>
-    </div>
-
-    <!-- Tab: Claim Cashback -->
-    <div class="wallet-tab-pane" data-tab="claim">
-      <form class="wallet-form" id="claimForm">
-        <div class="cb-formula">
-          <strong>💰 Cashback Formula</strong>
-          Order Amount × 1.25% (Max ₹100 per order)
-        </div>
-        <div class="form-group">
-          <label>Order ID *</label>
-          <input type="text" id="claimOrderId" placeholder="e.g. 408-1234567-8901234" required>
-        </div>
-        <div class="form-group">
-          <label>Product Link *</label>
-          <input type="url" id="claimProductLink" placeholder="https://amazon.in/dp/..." required>
-        </div>
-        <div class="form-group">
-          <label>Order Amount (₹) *</label>
-          <input type="number" id="claimOrderAmount" placeholder="e.g. 1299" min="1" step="0.01" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-full">Submit Cashback Claim</button>
-      </form>
-    </div>
-
-    <!-- Tab: Transactions -->
-    <div class="wallet-tab-pane" data-tab="transactions">
-      <div id="txnList">
-        <div class="empty-state">No transactions yet. Claim your first cashback!</div>
-      </div>
-    </div>
-
-    <!-- Tab: Withdraw -->
-    <div class="wallet-tab-pane" data-tab="withdraw">
-      <div style="padding:12px; background:#dcfce7; border-radius:10px; font-size:13px; color:#166534; margin-bottom:16px;">
-        ✅ Minimum withdrawal: <strong>₹500</strong>. Processed in 2-3 business days via UPI.
-      </div>
-      <form class="wallet-form" id="withdrawForm">
-        <div class="form-group">
-          <label>Amount to Withdraw (₹)</label>
-          <input type="number" id="withdrawAmount" placeholder="Min ₹500" min="500" step="0.01" required>
-        </div>
-        <div class="form-group">
-          <label>UPI ID / Bank Details</label>
-          <input type="text" id="withdrawUPI" placeholder="yourname@upi or Bank IFSC + Acc" required>
-        </div>
-        <button type="submit" class="btn btn-success btn-full">Request Withdrawal</button>
-      </form>
-    </div>
-  </div>
-</div>
+<!-- ✅ TOAST notification (for copy coupon, etc) -->
+<div class="toast" id="toast"></div>
 
 <script src="/script.js"></script>
 </body>
