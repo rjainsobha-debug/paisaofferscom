@@ -12,8 +12,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Best deals in India today! Handpicked offers on Amazon & Flipkart — up to 80% OFF. Electronics, Fashion, Home & more. Updated every few minutes.">
-  <meta name="keywords" content="deals today india, amazon deals, flipkart offers, best price, discount deals, loot deals, hot deals, paisaoffers">
+  <meta name="description" content="Best deals in India today! Handpicked offers on Amazon & Flipkart — up to 80% OFF. Updated every few minutes.">
   <meta property="og:title" content="PaisaOffers — Today's Best Deals in India 🔥">
   <meta property="og:description" content="Handpicked deals from Amazon, Flipkart & 500+ stores. Up to 80% OFF — updated every few minutes.">
   <meta property="og:type" content="website">
@@ -21,26 +20,11 @@
   <meta property="og:image" content="https://paisaoffers.com/opengraph.jpg">
   <meta name="twitter:card" content="summary_large_image">
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "PaisaOffers",
-    "url": "https://paisaoffers.com",
-    "description": "India's best deals discovery platform. Handpicked offers from Amazon, Flipkart and 500+ stores.",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://paisaoffers.com/?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
-  </script>
-
   <title>PaisaOffers — Best Deals in India | Amazon & Flipkart Offers Today</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/styles.css">
 </head>
@@ -49,7 +33,7 @@
 <!-- TELEGRAM TOP BAR -->
 <div class="tg-bar" id="tgBar">
   <span>📲 <strong>Get LIVE Deal Alerts!</strong> — Join 1 Lakh+ savers on Telegram</span>
-  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="tg-bar-btn" onclick="trackEvent('telegram_click','Top Bar')">
+  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="tg-bar-btn">
     <i class="fab fa-telegram"></i> Join Free
   </a>
   <button class="tg-bar-close" onclick="document.getElementById('tgBar').style.display='none'" aria-label="Close">×</button>
@@ -62,215 +46,58 @@
       <span class="logo-icon">⚡</span>
       <span class="logo-text">PaisaOffers</span>
     </a>
-
-    <nav class="nav-links" id="nav-links">
-      <a href="#hot-deals" class="nav-active">🔥 Hot Deals</a>
-      <a href="#deals">All Deals</a>
-      <a href="#coupons">🎟 Coupons</a>
-      <a href="#stores">Stores</a>
-      <a href="https://t.me/paisaoffersdotcom" target="_blank" class="nav-tg" onclick="trackEvent('telegram_click','Navbar')">
+    <div class="nav-right">
+      <a href="https://t.me/paisaoffersdotcom" target="_blank" class="nav-tg-btn">
         <i class="fab fa-telegram"></i> Telegram
       </a>
-    </nav>
-
-    <div class="nav-right">
       <div class="search-wrap">
         <i class="fas fa-search search-icon"></i>
-        <input type="search" id="searchInput" placeholder="Search deals..." class="search-input" autocomplete="off">
-        <div class="search-dropdown" id="searchDropdown"></div>
+        <input type="search" id="searchInput" placeholder="Search deals..." class="search-input" autocomplete="off" oninput="handleSearch(this.value)">
       </div>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </div>
 </header>
 
-<!-- CATEGORY PILLS — sticky under header -->
-<div class="cats-sticky" id="catsSticky">
-  <div class="cats-scroll">
-    <button class="cat-pill active" onclick="filterCategory('All')">🛍 All</button>
-    <button class="cat-pill" onclick="filterCategory('Electronics')">📱 Electronics</button>
-    <button class="cat-pill" onclick="filterCategory('Fashion')">👗 Fashion</button>
-    <button class="cat-pill" onclick="filterCategory('Home')">🏠 Home</button>
-    <button class="cat-pill" onclick="filterCategory('Mobiles')">📲 Mobiles</button>
-    <button class="cat-pill" onclick="filterCategory('Beauty')">💄 Beauty</button>
-    <button class="cat-pill" onclick="filterCategory('Sports')">🏋️ Sports</button>
-    <button class="cat-pill" onclick="filterCategory('Grocery')">🛒 Grocery</button>
-    <button class="cat-pill" onclick="filterCategory('Books')">📚 Books</button>
-    <button class="cat-pill" onclick="filterCategory('Travel')">✈️ Travel</button>
-  </div>
-</div>
-
-<!-- HOT DEALS — TOP 6 ABOVE THE FOLD -->
+<!-- HOT DEALS -->
 <section class="hot-section" id="hot-deals">
   <div class="container">
     <div class="section-title-row">
-      <h2 class="section-title"><span class="fire-pill">🔥 HOT</span> Top Deals Right Now</h2>
+      <h2 class="section-title">🔥 Top 6 Hot Deals</h2>
       <span class="live-badge"><span class="live-dot"></span>LIVE</span>
     </div>
     <div class="hot-grid" id="hotGrid">
-      <!-- hot deal shimmer -->
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
     </div>
   </div>
 </section>
 
-<!-- DEALS TOOLBAR + FULL FEED -->
+<!-- ALL DEALS -->
 <section class="deals-section" id="deals">
   <div class="container">
     <div class="deals-toolbar">
-      <div class="toolbar-left">
-        <h2>All Deals</h2>
-        <span class="deal-count" id="dealCount">Loading...</span>
-      </div>
-      <div class="toolbar-right">
-        <select id="filterSort" class="fselect" onchange="applyFilters()">
-          <option value="latest">🕐 Latest</option>
-          <option value="discount">💸 Top Discount</option>
-          <option value="ending">⏰ Ending Soon</option>
-        </select>
-        <select id="filterStore" class="fselect" onchange="applyFilters()">
-          <option value="All">All Stores</option>
-          <option value="Amazon">Amazon</option>
-          <option value="Flipkart">Flipkart</option>
-          <option value="Myntra">Myntra</option>
-          <option value="Meesho">Meesho</option>
-        </select>
-        <select id="filterDiscount" class="fselect" onchange="applyFilters()">
-          <option value="0">All %</option>
-          <option value="50">50%+</option>
-          <option value="60">60%+</option>
-          <option value="70">70%+</option>
-          <option value="80">80%+</option>
-        </select>
-      </div>
+      <h2>All Deals <span class="deal-count" id="dealCount"></span></h2>
+      <select id="filterSort" class="fselect" onchange="applyFilters()">
+        <option value="discount">💸 Top Discount</option>
+        <option value="latest">🕐 Latest</option>
+      </select>
     </div>
-
     <div class="deals-grid" id="dealsGrid">
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
+      <div class="shimmer-card"></div>
     </div>
-
     <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
-      <button class="btn-load-more" onclick="loadMoreDeals()">
+      <button class="btn-load-more" onclick="loadMore()">
         <i class="fas fa-plus-circle"></i> Load More Deals
       </button>
-    </div>
-  </div>
-</section>
-
-<!-- TOP DISCOUNTS -->
-<section class="top-disc-section" id="topDiscounts">
-  <div class="container">
-    <div class="section-title-row">
-      <h2 class="section-title">💸 Top Discounts Today</h2>
-    </div>
-    <div class="deals-grid" id="editorDealsGrid">
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-      <div class="deal-card shimmer-card"></div>
-    </div>
-  </div>
-</section>
-
-<!-- STORES -->
-<section class="stores-section" id="stores">
-  <div class="container">
-    <div class="section-title-row">
-      <h2 class="section-title">🏪 Top Stores</h2>
-    </div>
-    <div class="stores-grid">
-      <a href="https://amzn.to/4t7XSrt" target="_blank" class="store-card" onclick="trackEvent('deal_click','Store Amazon')">
-        <div class="store-ico">🛒</div>
-        <div class="store-name">Amazon</div>
-        <div class="store-sub">Up to 80% OFF</div>
-      </a>
-      <a href="#" onclick="filterCategory('All'); scrollToDeals(); return false;" class="store-card">
-        <div class="store-ico">🎯</div>
-        <div class="store-name">Flipkart</div>
-        <div class="store-sub">Super Saver</div>
-      </a>
-      <a href="#" onclick="filterCategory('Fashion'); scrollToDeals(); return false;" class="store-card">
-        <div class="store-ico">👗</div>
-        <div class="store-name">Myntra</div>
-        <div class="store-sub">Fashion Deals</div>
-      </a>
-      <a href="#" onclick="filterCategory('All'); scrollToDeals(); return false;" class="store-card">
-        <div class="store-ico">📦</div>
-        <div class="store-name">Meesho</div>
-        <div class="store-sub">Low Prices</div>
-      </a>
-      <a href="#" onclick="filterCategory('Grocery'); scrollToDeals(); return false;" class="store-card">
-        <div class="store-ico">🥦</div>
-        <div class="store-name">BigBasket</div>
-        <div class="store-sub">Fresh Deals</div>
-      </a>
-      <a href="#" onclick="filterCategory('Health'); scrollToDeals(); return false;" class="store-card">
-        <div class="store-ico">💊</div>
-        <div class="store-name">1mg</div>
-        <div class="store-sub">Health Deals</div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- COUPONS -->
-<section class="coupons-section" id="coupons">
-  <div class="container">
-    <div class="section-title-row">
-      <h2 class="section-title">🎟 Active Coupons</h2>
-      <span class="section-sub">Copy & apply at checkout</span>
-    </div>
-    <div class="coupons-grid">
-      <div class="coupon-card">
-        <div class="coupon-store amazon">Amazon</div>
-        <div class="coupon-title">Extra 10% OFF on Electronics</div>
-        <div class="coupon-row">
-          <span class="coupon-code" id="coupon-AMZTECH10">AMZTECH10</span>
-          <button class="copy-btn" onclick="copyCoupon('AMZTECH10')"><i class="fas fa-copy"></i> Copy</button>
-        </div>
-        <div class="coupon-valid">✅ Electronics Category</div>
-      </div>
-      <div class="coupon-card">
-        <div class="coupon-store flipkart">Flipkart</div>
-        <div class="coupon-title">Flat ₹200 OFF on ₹999+</div>
-        <div class="coupon-row">
-          <span class="coupon-code" id="coupon-FK200OFF">FK200OFF</span>
-          <button class="copy-btn" onclick="copyCoupon('FK200OFF')"><i class="fas fa-copy"></i> Copy</button>
-        </div>
-        <div class="coupon-valid">✅ All Categories</div>
-      </div>
-      <div class="coupon-card">
-        <div class="coupon-store myntra">Myntra</div>
-        <div class="coupon-title">30% OFF on First Order</div>
-        <div class="coupon-row">
-          <span class="coupon-code" id="coupon-MYNFIRST30">MYNFIRST30</span>
-          <button class="copy-btn" onclick="copyCoupon('MYNFIRST30')"><i class="fas fa-copy"></i> Copy</button>
-        </div>
-        <div class="coupon-valid">✅ New Users Only</div>
-      </div>
-      <div class="coupon-card">
-        <div class="coupon-store amazon">Amazon</div>
-        <div class="coupon-title">Up to ₹500 OFF on Mobiles</div>
-        <div class="coupon-row">
-          <span class="coupon-code" id="coupon-MOB500">MOB500</span>
-          <button class="copy-btn" onclick="copyCoupon('MOB500')"><i class="fas fa-copy"></i> Copy</button>
-        </div>
-        <div class="coupon-valid">✅ Smartphones</div>
-      </div>
     </div>
   </div>
 </section>
@@ -279,19 +106,12 @@
 <section class="tg-cta-section">
   <div class="container">
     <div class="tg-cta-card">
-      <div class="tg-cta-icon">📲</div>
       <div class="tg-cta-body">
-        <h3>Never Miss a Loot Deal Again!</h3>
-        <p>Get instant deal alerts on Telegram before they expire. 1 Lakh+ smart savers already inside!</p>
-        <div class="tg-features">
-          <span>✅ Free to join</span>
-          <span>✅ No spam</span>
-          <span>✅ Instant alerts</span>
-          <span>✅ 1L+ members</span>
-        </div>
+        <h3>📲 Never Miss a Loot Deal!</h3>
+        <p>Get instant alerts on Telegram before they expire. 1 Lakh+ smart savers already inside!</p>
       </div>
-      <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn-tg-big" onclick="trackEvent('telegram_click','CTA Section')">
-        <i class="fab fa-telegram"></i> Join Telegram — Free!
+      <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn-tg-big">
+        <i class="fab fa-telegram"></i> Join Free Now
       </a>
     </div>
   </div>
@@ -300,39 +120,13 @@
 <!-- FOOTER -->
 <footer class="footer">
   <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="footer-logo">⚡ PaisaOffers</div>
-        <p>India's fastest deals discovery platform. Handpicked offers from Amazon, Flipkart & 500+ stores — updated every few minutes.</p>
-        <div class="footer-social">
-          <a href="https://t.me/paisaoffersdotcom" target="_blank" title="Telegram" onclick="trackEvent('telegram_click','Footer')"><i class="fab fa-telegram"></i></a>
-          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Quick Links</h4>
-        <a href="#hot-deals">Hot Deals</a>
-        <a href="#deals">All Deals</a>
-        <a href="#coupons">Coupons</a>
-        <a href="#stores">Stores</a>
-        <a href="https://t.me/paisaoffersdotcom" target="_blank">Telegram</a>
-      </div>
-      <div class="footer-col">
-        <h4>Top Stores</h4>
-        <a href="https://amzn.to/4t7XSrt" target="_blank">Amazon Deals</a>
-        <a href="#" onclick="filterCategory('All'); return false;">Flipkart Deals</a>
-        <a href="#" onclick="filterCategory('Fashion'); return false;">Myntra Deals</a>
-        <a href="#" onclick="filterCategory('Grocery'); return false;">BigBasket Deals</a>
-        <a href="#" onclick="filterCategory('Electronics'); return false;">Electronics</a>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <a href="#">About Us</a>
-        <a href="#">Contact</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Advertise</a>
+    <div class="footer-inner">
+      <div class="footer-logo">⚡ PaisaOffers</div>
+      <p>India's fastest deals platform. Handpicked offers from Amazon, Flipkart & 500+ stores.</p>
+      <div class="footer-social">
+        <a href="https://t.me/paisaoffersdotcom" target="_blank"><i class="fab fa-telegram"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -344,12 +138,8 @@
 
 <!-- FABs -->
 <div class="fab-group">
-  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="fab fab-tg" title="Join Telegram" onclick="trackEvent('telegram_click','FAB')">
+  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="fab fab-tg" title="Join Telegram">
     <i class="fab fa-telegram"></i>
-    <span class="fab-label">Deals</span>
-  </a>
-  <a href="https://wa.me/?text=Check%20out%20today%27s%20best%20deals%20on%20PaisaOffers.com%20-%20Up%20to%2080%25%20OFF!%20https%3A%2F%2Fpaisaoffers.com" target="_blank" class="fab fab-wa" title="Share on WhatsApp" onclick="trackEvent('share_click','FAB WhatsApp')">
-    <i class="fab fa-whatsapp"></i>
   </a>
 </div>
 
@@ -357,21 +147,7 @@
   <i class="fas fa-arrow-up"></i>
 </button>
 
-<!-- Toast -->
-<div id="poToast" class="po-toast" style="display:none"></div>
-
-<!-- Telegram popup -->
-<div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
-<div class="tg-popup" id="telegramPopup">
-  <button class="popup-close" onclick="closePopup()">×</button>
-  <div class="popup-icon">📲</div>
-  <h3>Get Deals Before They Expire!</h3>
-  <p>Join our Telegram for instant alerts on loot deals & flash sales.</p>
-  <a href="https://t.me/paisaoffersdotcom" target="_blank" class="btn-tg-big" onclick="closePopup(); trackEvent('telegram_click','Popup')">
-    <i class="fab fa-telegram"></i> Join Free Now
-  </a>
-  <button class="popup-skip" onclick="closePopup()">Maybe Later</button>
-</div>
+<div id="toast" class="toast" style="display:none"></div>
 
 <script src="/script.js"></script>
 </body>
