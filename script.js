@@ -1,14 +1,89 @@
 /* ============================================================
    PaisaOffers — script.js  PRODUCTION
-   Source: WEB_SHEET (status_web = YES)
-   API: your deployed Google Apps Script Web App URL
+   Source: WEB_SHEET  |  Filter: status_web = YES
    ============================================================ */
 
 const API_URL = "https://script.google.com/macros/s/AKfycbzR8WO3FsNJ7mek1nrSm3-V2YLafqjEJLYl1arATB2DiM8eQUaUc-ca7qplnDgmVCJ2/exec";
 
-let allDeals      = [];   // approved + sorted
-let filteredDeals = [];   // after search/filter
+let allDeals      = [];
+let filteredDeals = [];
 let visibleCount  = 12;
+
+/* ================= HELPERS ================= */
+function fmt(num) {
+  return Number(num || 0).toLocaleString("en-IN");
+}
+
+function safeStr(val) {
+  if (val === null || val === undefined) return "";
+  return String(val).trim();
+}
+
+function escHtml(str) {
+  return safeStr(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function escAttr(str) {
+  return safeStr(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+/* ================= NORMALIZE ROW ================= */
+/*
+  WEB_SHEET columns (by header name):
+  id | title | link | image | old_price | new_price | hook | status_web
+
+  getField() does case-insensitive, space-tolerant key lookup so minor
+  header variations ("status web", "Status_Web", etc.) are handled safely.
+*/
+function getField(row, ...candidates) {
+  const keys = Object.keys(row);
+  for (const c of candidates) {
+    const target = c.toLowerCase().replace(/[\s_]+/g, "_");
+    const found  = keys.find(
+      k => k.toLowerCase().replace(/[\s_]+/g, "_") === target
+    );
+    if (
+      found !== undefined &&
+      row[found] !== "" &&
+      row[found] !== null &&
+      row[found] !== undefined
+    ) {
+      return row[found];
+    }
+  }
+  return "";
+}
+
+function normalize(row) {
+  const oldP = parseFloat(getField(row, "old_price", "old price", "mrp")) || 0;
+  const newP = parseFloat(getField(row, "new_price", "new price", "price")) || 0;
+
+  const discount =
+    oldP > 0 && oldP > newP
+      ? Math.round(((oldP - newP) / oldP) * 100)
+      : 0;
+
+  const statusRaw = String(
+    getField(row, "status_web", "status web", "statusweb", "status") || ""
+  )
+    .trim()
+    .toUpperCase();
+
+  return {
+    title:      safeStr(getField(row, "title"))  || "Deal",
+    image:      safeStr(getField(row, "image"))  || "",
+    link:       safeStr(getField(row, "link"))   || "#",
+    hook:       safeStr(getField(row, "hook")),
+    old:        oldP,
+    new:        newP,
+    discount:   discount,
+    status_web: statusRaw   // normalised to "YES" / "NO" / ""
+  };
+}
 
 /* ================= LOAD DATA ================= */
 async function loadDeals() {
@@ -16,23 +91,34 @@ async function loadDeals() {
     const url = API_URL + "?t=" + Date.now();
     console.log("[PaisaOffers] Fetching:", url);
 
-    const res  = await fetch(url);
-    const raw  = await res.json();
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    let raw;
+    try {
+      raw = await res.json();
+    } catch (e) {
+      throw new Error("JSON parse failed: " + e.message);
+    }
+
+    if (!Array.isArray(raw)) {
+      console.error("[PaisaOffers] API did not return an array:", raw);
+      throw new Error("Expected array from API");
+    }
 
     console.log("[PaisaOffers] Raw rows from API:", raw.length);
 
-    // Normalise every row
     const normalised = raw.map(normalize);
 
-    // Filter: only rows where status_web === "YES"
+    // ★ CORE FILTER — only approved deals
     allDeals = normalised.filter(d => d.status_web === "YES");
 
-    console.log("[PaisaOffers] Deals after YES filter:", allDeals.length);
+    console.log("[PaisaOffers] Deals with status_web=YES:", allDeals.length);
 
     if (allDeals.length === 0) {
       console.warn(
-        "[PaisaOffers] ⚠️  0 deals passed the filter. " +
-        "Check that WEB_SHEET rows have status_web = YES (uppercase)."
+        "[PaisaOffers] ⚠️  0 deals passed the YES filter.\n" +
+        "In WEB_SHEET, column 'status_web' must contain exactly: YES"
       );
     }
 
@@ -46,45 +132,20 @@ async function loadDeals() {
     updateCount();
 
   } catch (err) {
-    console.error("[PaisaOffers] Load error:", err);
+    console.error("[PaisaOffers] Load failed:", err);
     const grid = document.getElementById("dealsGrid");
     if (grid) {
-      grid.innerHTML = "<div class='empty-state'>⚠️ Failed to load deals. Check console.</div>";
+      grid.innerHTML =
+        "<div class='empty-state'>⚠️ Failed to load deals. Check browser console.</div>";
     }
   }
-}
-
-/* ================= NORMALIZE ================= */
-function normalize(row) {
-  const oldP = parseFloat(row.old_price) || 0;
-  const newP = parseFloat(row.new_price) || 0;
-
-  const discount = (oldP > 0 && oldP > newP)
-    ? Math.round(((oldP - newP) / oldP) * 100)
-    : 0;
-
-  // Trim and uppercase status_web so "yes", " YES ", etc. all match
-  const statusRaw = String(row.status_web || "").trim().toUpperCase();
-
-  return {
-    title:      String(row.title  || "Deal").trim(),
-    image:      String(row.image  || "https://via.placeholder.com/300").trim(),
-    link:       String(row.link   || "#").trim(),
-    hook:       String(row.hook   || "").trim(),
-    old:        oldP,
-    new:        newP,
-    discount:   discount,
-    status_web: statusRaw
-  };
 }
 
 /* ================= HOT DEALS (top 6) ================= */
 function renderHotDeals() {
   const container = document.getElementById("hotGrid");
   if (!container) return;
-
-  const hotDeals = allDeals.slice(0, 6);
-  container.innerHTML = hotDeals.map(card).join("");
+  container.innerHTML = allDeals.slice(0, 6).map(card).join("");
 }
 
 /* ================= ALL DEALS ================= */
@@ -96,21 +157,23 @@ function renderDeals() {
 
   if (slice.length === 0) {
     grid.innerHTML = "<div class='empty-state'>No deals found</div>";
-    document.getElementById("loadMoreWrap").style.display = "none";
+    setLoadMoreVisible(false);
     return;
   }
 
   grid.innerHTML = slice.map(card).join("");
+  setLoadMoreVisible(filteredDeals.length > visibleCount);
+}
 
-  const loadMoreWrap = document.getElementById("loadMoreWrap");
-  if (loadMoreWrap) {
-    loadMoreWrap.style.display =
-      filteredDeals.length > visibleCount ? "block" : "none";
-  }
+function setLoadMoreVisible(show) {
+  const wrap = document.getElementById("loadMoreWrap");
+  if (wrap) wrap.style.display = show ? "block" : "none";
 }
 
 /* ================= CARD ================= */
 function card(d) {
+  const imgSrc = d.image || "https://via.placeholder.com/300x300?text=No+Image";
+
   const waText = encodeURIComponent(
     "🔥 " + d.title +
     "\n\n💰 ₹" + d.new + " (MRP ₹" + d.old + ")" +
@@ -118,36 +181,35 @@ function card(d) {
   );
   const waLink = "https://wa.me/?text=" + waText;
 
-  const badgeHTML = d.discount > 0
+  const badge  = d.discount > 0
     ? `<span class="discount-badge">${d.discount}% OFF</span>`
     : "";
 
-  const hookHTML = d.hook
-    ? `<div class="deal-hook">${escapeHtml(d.hook)}</div>`
+  const hookEl = d.hook
+    ? `<div class="deal-hook">${escHtml(d.hook)}</div>`
     : "";
 
-  const oldPriceHTML = d.old > 0
-    ? `<span class="old-price">₹${format(d.old)}</span>`
+  const oldEl  = d.old > 0
+    ? `<span class="old-price">₹${fmt(d.old)}</span>`
     : "";
 
-  return `
-<div class="deal-card">
+  return `<div class="deal-card">
   <div class="deal-img-wrap">
-    <img src="${escapeAttr(d.image)}" alt="${escapeAttr(d.title)}" loading="lazy"
-         onerror="this.src='https://via.placeholder.com/300'">
-    ${badgeHTML}
+    <img src="${escAttr(imgSrc)}" alt="${escAttr(d.title)}" loading="lazy"
+         onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
+    ${badge}
   </div>
   <div class="deal-body">
-    <div class="deal-title">${escapeHtml(d.title)}</div>
-    ${hookHTML}
+    <div class="deal-title">${escHtml(d.title)}</div>
+    ${hookEl}
     <div class="deal-prices">
-      <span class="new-price">₹${format(d.new)}</span>
-      ${oldPriceHTML}
+      <span class="new-price">₹${fmt(d.new)}</span>
+      ${oldEl}
     </div>
     <div class="deal-actions">
-      <a href="${escapeAttr(d.link)}" target="_blank" rel="noopener" class="btn-buy"
-         onclick="trackClick('${escapeAttr(d.title)}')">🛒 Buy</a>
-      <a href="${escapeAttr(waLink)}" target="_blank" rel="noopener" class="btn-wa">📲</a>
+      <a href="${escAttr(d.link)}" target="_blank" rel="noopener" class="btn-buy"
+         onclick="trackClick('${escAttr(d.title)}')">🛒 Buy</a>
+      <a href="${escAttr(waLink)}" target="_blank" rel="noopener" class="btn-wa">📲</a>
     </div>
   </div>
 </div>`;
@@ -167,7 +229,7 @@ function updateCount() {
 
 /* ================= SEARCH ================= */
 function handleSearch(q) {
-  const query = String(q || "").toLowerCase().trim();
+  const query = safeStr(q).toLowerCase();
 
   filteredDeals = query
     ? allDeals.filter(d => d.title.toLowerCase().includes(query))
@@ -176,6 +238,8 @@ function handleSearch(q) {
   visibleCount = 12;
   renderDeals();
   updateCount();
+
+  console.log("[PaisaOffers] Search:", JSON.stringify(query), "→", filteredDeals.length, "results");
 }
 
 /* ================= SORT ================= */
@@ -186,7 +250,6 @@ function applyFilters() {
   if (val === "discount") {
     filteredDeals.sort((a, b) => b.discount - a.discount);
   } else {
-    // "latest" = reverse of discount sort (original sheet order, roughly)
     filteredDeals.sort((a, b) => a.discount - b.discount);
   }
 
@@ -197,23 +260,6 @@ function applyFilters() {
 /* ================= TRACKING ================= */
 function trackClick(title) {
   console.log("[PaisaOffers] Clicked:", title);
-}
-
-/* ================= HELPERS ================= */
-function format(num) {
-  return Number(num).toLocaleString("en-IN");
-}
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function escapeAttr(str) {
-  return String(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 /* ================= INIT ================= */
