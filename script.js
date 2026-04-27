@@ -3,7 +3,7 @@
    Source: WEB_SHEET  |  Filter: status_web = YES
    ============================================================ */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzR8WO3FsNJ7mek1nrSm3-V2YLafqjEJLYl1arATB2DiM8eQUaUc-ca7qplnDgmVCJ2/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbww3HZObttgIINGU8HinFfvybJMwCTVV1j7O7Ajfmc0PPMWnmG8CHWx8p71EHjvuRtg/exec";
 
 let allDeals      = [];
 let filteredDeals = [];
