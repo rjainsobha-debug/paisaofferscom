@@ -8,11 +8,15 @@ from datetime import datetime, timezone
 from html import unescape
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import requests
-from bs4 import BeautifulSoup
 from openpyxl import load_workbook
+
+try:
+    from bs4 import BeautifulSoup
+except ModuleNotFoundError:
+    BeautifulSoup = None
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,13 +36,15 @@ USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/125.0.0.0 Safari/537.36 PaisaOffersPublisher/1.0"
 )
-ALLOWED_LINK_HOST_PARTS = ("amazon.in", "amzn.in", "amazon.com")
+ALLOWED_LINK_HOSTS = ("amazon.in", "amazon.com", "amzn.in", "amzn.to")
+PRICE_TEXT_FIELDS = ("clean_title", "short_message", "notes")
 
 
 class ImageResolver:
     def __init__(self, cache_path: Path):
         self.cache_path = cache_path
         self.cache: dict[str, dict[str, str]] = self._load_cache()
+        self.images_from_excel = 0
         self.images_fetched = 0
         self.images_from_cache = 0
         self.image_fetch_failed = 0
@@ -49,10 +55,10 @@ class ImageResolver:
         asin = (asin or "").strip().upper()
         cached = self.cache.get(asin)
         if cached and cached.get("image_url"):
-            self.images_from_cache += 1
-            if cached.get("source") == "fallback":
-                self.fallback_images_used += 1
-            return cached["image_url"]
+            cached_image_url = str(cached.get("image_url") or "").strip()
+            if _is_publishable_image_url(cached_image_url) and cached.get("source") != "fallback":
+                self.images_from_cache += 1
+                return cached_image_url
 
         image_url = ""
         source = ""
@@ -72,14 +78,7 @@ class ImageResolver:
             return image_url
 
         self.image_fetch_failed += 1
-        self.fallback_images_used += 1
-        self.cache[asin] = {
-            "asin": asin,
-            "image_url": FALLBACK_IMAGE,
-            "fetched_at": _now_iso(),
-            "source": "fallback",
-        }
-        return FALLBACK_IMAGE
+        return ""
 
     def save(self) -> None:
         self.cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -93,6 +92,8 @@ class ImageResolver:
         html = response.text or ""
         if _looks_blocked(html):
             return "", ""
+        if BeautifulSoup is None:
+            return _image_from_html_without_bs4(html, url)
         soup = BeautifulSoup(html, "html.parser")
 
         og_image = _clean_image_url((soup.find("meta", property="og:image") or {}).get("content"), url)
@@ -157,7 +158,14 @@ def main() -> int:
     for row in candidates_by_asin.values():
         asin = str(row.get("asin", "")).strip().upper()
         normalized_url = str(row.get("normalized_amazon_url", "")).strip() or f"https://www.amazon.in/dp/{asin}"
-        image_url = image_resolver.resolve(asin, normalized_url)
+        image_url = _product_image_url_from_row(row)
+        if image_url:
+            image_resolver.images_from_excel += 1
+        else:
+            image_url = image_resolver.resolve(asin, normalized_url)
+        if not image_url:
+            skipped["missing_product_image"] += 1
+            continue
         deal = _deal_from_row(row, image_url)
         deals.append(deal)
 
@@ -216,14 +224,14 @@ def _read_rows(excel_path: Path) -> list[dict[str, Any]]:
 
 
 def _validation_skip_reason(row: dict[str, Any]) -> str:
+    _populate_missing_prices(row)
     required = {
         "asin": row.get("asin"),
         "deal_price": row.get("deal_price"),
-        "original_price": row.get("original_price"),
         "site_stripe_affiliate_link": row.get("site_stripe_affiliate_link"),
     }
     for field, value in required.items():
-        if value in (None, ""):
+        if _is_missing(value):
             return f"missing_{field}"
     if not _is_allowed_amazon_link(str(row.get("site_stripe_affiliate_link", ""))):
         return "invalid_affiliate_link"
@@ -231,8 +239,6 @@ def _validation_skip_reason(row: dict[str, Any]) -> str:
         return "missing_clean_title"
     if _number(row.get("deal_price")) <= 0:
         return "invalid_deal_price"
-    if _number(row.get("original_price")) <= 0:
-        return "invalid_original_price"
     return ""
 
 
@@ -241,7 +247,7 @@ def _deal_from_row(row: dict[str, Any], image_url: str) -> dict[str, Any]:
     return {
         "asin": str(row.get("asin", "") or "").strip().upper(),
         "title": str(row.get("clean_title", "") or "").strip(),
-        "image_url": image_url or FALLBACK_IMAGE,
+        "image_url": image_url,
         "deal_price": _number(row.get("deal_price")),
         "original_price": _number(row.get("original_price")),
         "discount_percent": _number(row.get("discount_pct")),
@@ -256,8 +262,72 @@ def _deal_from_row(row: dict[str, Any], image_url: str) -> dict[str, Any]:
 
 
 def _is_allowed_amazon_link(url: str) -> bool:
-    lowered = (url or "").lower()
-    return any(part in lowered for part in ALLOWED_LINK_HOST_PARTS)
+    text = (url or "").strip()
+    if not text:
+        return False
+    parsed = urlparse(text if re.match(r"^[a-z][a-z0-9+.-]*://", text, re.I) else f"https://{text}")
+    host = (parsed.netloc or parsed.path.split("/", 1)[0]).lower()
+    if "@" in host:
+        host = host.rsplit("@", 1)[-1]
+    host = host.split(":", 1)[0].strip(".")
+    return any(host == allowed or host.endswith(f".{allowed}") for allowed in ALLOWED_LINK_HOSTS)
+
+
+def _populate_missing_prices(row: dict[str, Any]) -> None:
+    if _is_missing(row.get("deal_price")):
+        extracted_price = _extract_first_from_text(row, extract_price_from_text)
+        if extracted_price > 0:
+            row["deal_price"] = extracted_price
+
+    if _is_missing(row.get("discount_pct")):
+        extracted_discount = _extract_first_from_text(row, extract_discount_from_text)
+        if extracted_discount > 0:
+            row["discount_pct"] = extracted_discount
+
+    deal_price = _number(row.get("deal_price"))
+    discount_pct = _number(row.get("discount_pct"))
+    if _is_missing(row.get("original_price")) and deal_price > 0 and 1 <= discount_pct <= 95:
+        row["original_price"] = round(deal_price / (1 - discount_pct / 100), 2)
+
+    if _is_missing(row.get("original_price")) and deal_price > 0:
+        row["original_price"] = deal_price
+
+
+def _extract_first_from_text(row: dict[str, Any], extractor) -> float:
+    for field in PRICE_TEXT_FIELDS:
+        value = extractor(row.get(field))
+        if value > 0:
+            return value
+    return 0.0
+
+
+def extract_price_from_text(text: Any) -> float:
+    value = str(text or "")
+    if not value.strip():
+        return 0.0
+    patterns = (
+        r"\bprice\s*:\s*(?:rs\.?\s*)?(?:inr\s*)?(?:₹\s*)?(\d[\d,]*(?:\.\d+)?)\s*(?:rs\.?|inr|₹)?",
+        r"\bstarting\s*@\s*(?:rs\.?\s*)?(?:inr\s*)?(?:₹\s*)?(\d[\d,]*(?:\.\d+)?)",
+        r"\bjust\s*(?:rs\.?\s*)?(?:inr\s*)?₹?\s*(\d[\d,]*(?:\.\d+)?)",
+        r"@\s*(?:rs\.?\s*)?(?:inr\s*)?₹\s*(\d[\d,]*(?:\.\d+)?)",
+        r"\brs\.?\s*(\d[\d,]*(?:\.\d+)?)",
+        r"₹\s*(\d[\d,]*(?:\.\d+)?)",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, value, re.I)
+        if match:
+            return float(match.group(1).replace(",", ""))
+    return 0.0
+
+
+def extract_discount_from_text(text: Any) -> float:
+    value = str(text or "")
+    if not value.strip():
+        return 0.0
+    match = re.search(r"\bdiscount\s*:\s*(\d+(?:\.\d+)?)\s*%\s*off\b", value, re.I)
+    if not match:
+        match = re.search(r"\b(\d+(?:\.\d+)?)\s*%\s*off\b", value, re.I)
+    return float(match.group(1)) if match else 0.0
 
 
 def _row_sort_date(row: dict[str, Any]) -> datetime:
@@ -292,6 +362,25 @@ def _number(value: Any) -> float:
     return float(match.group(0).replace(",", "")) if match else 0.0
 
 
+def _is_missing(value: Any) -> bool:
+    if value in (None, ""):
+        return True
+    if isinstance(value, float) and value != value:
+        return True
+    return not str(value).strip()
+
+
+def _product_image_url_from_row(row: dict[str, Any]) -> str:
+    value = str(row.get("product_image_url", "") or "").strip()
+    return value if _is_publishable_image_url(value) else ""
+
+
+def _is_publishable_image_url(value: str) -> bool:
+    text = str(value or "").strip()
+    lowered = text.lower()
+    return lowered.startswith("http") and not lowered.endswith(FALLBACK_IMAGE)
+
+
 def _clean_image_url(value: str | None, base_url: str) -> str:
     if not value:
         return ""
@@ -319,6 +408,29 @@ def _dynamic_image_url(raw_value: str | None, base_url: str) -> str:
         if cleaned:
             return cleaned
     return ""
+
+
+def _image_from_html_without_bs4(html: str, base_url: str) -> tuple[str, str]:
+    og_match = re.search(
+        r"""<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']""",
+        html,
+        re.I,
+    ) or re.search(
+        r"""<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']""",
+        html,
+        re.I,
+    )
+    if og_match:
+        image_url = _clean_image_url(og_match.group(1), base_url)
+        if image_url:
+            return image_url, "og:image"
+
+    img_match = re.search(r"""<img[^>]+id=["']landingImage["'][^>]+src=["']([^"']+)["']""", html, re.I)
+    if img_match:
+        image_url = _clean_image_url(img_match.group(1), base_url)
+        if image_url:
+            return image_url, "landingImage:src"
+    return "", ""
 
 
 def _looks_blocked(html: str) -> bool:
@@ -356,9 +468,11 @@ def _write_report(
         lines.append("  none: 0")
     lines.extend(
         [
-            f"images_fetched: {image_resolver.images_fetched}",
+            f"images_from_excel: {image_resolver.images_from_excel}",
             f"images_from_cache: {image_resolver.images_from_cache}",
+            f"images_fetched: {image_resolver.images_fetched}",
             f"image_fetch_failed: {image_resolver.image_fetch_failed}",
+            f"missing_product_image: {skipped.get('missing_product_image', 0)}",
             f"fallback_images_used: {image_resolver.fallback_images_used}",
         ]
     )
@@ -382,9 +496,11 @@ def _print_summary(
         print("Skipped reasons:")
         for reason, count in sorted(skipped.items()):
             print(f"  {reason}: {count}")
-    print(f"images_fetched: {image_resolver.images_fetched}")
+    print(f"images_from_excel: {image_resolver.images_from_excel}")
     print(f"images_from_cache: {image_resolver.images_from_cache}")
+    print(f"images_fetched: {image_resolver.images_fetched}")
     print(f"image_fetch_failed: {image_resolver.image_fetch_failed}")
+    print(f"missing_product_image: {skipped.get('missing_product_image', 0)}")
     print(f"fallback_images_used: {image_resolver.fallback_images_used}")
     print(f"Wrote: {OUTPUT_JSON}")
     print(f"Report: {REPORT_PATH}")
