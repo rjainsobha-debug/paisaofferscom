@@ -1,0 +1,7 @@
+tools/amazon_deal_queue.xlsx
+tools/publish_report.txt
+*.xlsx
+.env
+__pycache__/
+.venv/
+node_modules/
